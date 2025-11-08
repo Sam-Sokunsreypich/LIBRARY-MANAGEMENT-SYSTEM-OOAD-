@@ -1,7 +1,19 @@
-import Image from "next/image";
-import { readFileSync } from "fs";
-export default function Home() {
+import Link from "next/link";
+import AuthForm from "./auth/components/AuthForm";
+import { readUserSession } from "@/lib/actions";
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+  const { data: userSession } = await readUserSession();
+    
+      if (userSession.session) {
+        redirect("/admin");
+      }
   return (
-    <h3 className="text-blue-600 text-2xl text-center mt-20">Hello welcome to library management system.</h3>
+    
+    <div>
+      <AuthForm/>
+    </div>
+
   );
 }
