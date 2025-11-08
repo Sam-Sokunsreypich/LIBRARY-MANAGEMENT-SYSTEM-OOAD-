@@ -1,9 +1,7 @@
-"use client"
-
-import { useEffect, useState } from 'react'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -17,13 +15,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 
-interface EditRuleProps{
-    open : boolean,
-    onOpenChange: (open: boolean)=> void,
-    defaultValues?: z.infer<typeof formSchema>
+
+interface CreateFineProps{
+    open: boolean,
+    onOpenChange: (open: boolean)=>void,
     onSubmitData?: (values: z.infer<typeof formSchema>) => void
 }
-
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -35,35 +32,44 @@ const formSchema = z.object({
   fine: z.number().min(0, { message: "Fine must be positive" })
 })
 
-export default function EditFine({open, onOpenChange, defaultValues, onSubmitData}:EditRuleProps) {
- const [isModalOpen, setIsModalOpen] = useState(false)
-
-   const form = useForm<z.infer<typeof formSchema>>({
+export default function CreateFine({open,onOpenChange, onSubmitData}:CreateFineProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      fine: 0,
-    },
+        defaultValues: {
+          title: "",
+          description: "",
+          fine: 0,
+        },
   })
 
-  useEffect(() => {
-    if (defaultValues) {
-      form.reset(defaultValues)
+ async function onSubmit(values: z.infer<typeof formSchema>) {
+  //     const {data, error} = await supabase
+  //     .from('rules')
+  //     .insert([{
+  //       title: values.title,
+  //       description: values.description,
+  //       fine: values.fine 
+  //     }])
+  //     .select()
+
+  //     if (error) {
+  //   console.error('Error creating rule:', error.message)
+  //   alert('Failed to create rule')
+  //   return
+  // }
+
+      form.reset()
+      setIsModalOpen(false)
+      // onSubmitData?.(data[0])
     }
-  }, [defaultValues, form])
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    setIsModalOpen(false)
-  }
   
-
-  return (
+    return (
     <Dialog  open={open} onOpenChange={onOpenChange}>
          <DialogContent>
             <DialogHeader>
-                <DialogTitle>Edit Rule of Fine</DialogTitle>
+                <DialogTitle>Create Rule of Fine</DialogTitle>
             </DialogHeader>
              <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -74,7 +80,7 @@ export default function EditFine({open, onOpenChange, defaultValues, onSubmitDat
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder={defaultValues?.title} {...field} />
+                <Input placeholder="title" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -91,7 +97,7 @@ export default function EditFine({open, onOpenChange, defaultValues, onSubmitDat
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input placeholder={defaultValues?.description} {...field} />
+                <Input placeholder="description" {...field} />
               </FormControl>
               <FormDescription>
                 This is your Description.
@@ -108,10 +114,10 @@ export default function EditFine({open, onOpenChange, defaultValues, onSubmitDat
             <FormItem>
               <FormLabel>Fine</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+               <Input
+                type="number"
+                {...field}
+                onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
               <FormDescription>
@@ -124,7 +130,7 @@ export default function EditFine({open, onOpenChange, defaultValues, onSubmitDat
         />
         <div className='gap-3 flex justify-end'>
           <Button type='button' onClick={() => onOpenChange(false)} className='bg-gray-400 hover:bg-gray-500 text-white'>Cancel</Button>
-          <Button className='bg-orange-500 hover:bg-orange-600 text-white' type="submit">Save</Button>
+          <Button className='bg-orange-400 hover:bg-orange-600 text-white' type="submit">Save</Button>
         </div>
       </form>
     </Form>
