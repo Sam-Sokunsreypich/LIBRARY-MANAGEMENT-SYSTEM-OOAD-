@@ -26,10 +26,11 @@ export default function UserManagement({ permission }: { permission: IPermission
       {/* Main Content */}
       <div className="ml-60 flex flex-col flex-1 bg-gray-50">
         <SearchBar />
+        
+        {/* Line */}
+        <div className="border-b border-gray-300"></div>
 
-        <div className="border-b border-gray-300">
-
-        </div>
+        
         {/* Dropdown */}
         <div className="mt-4 flex justify-between">
           <select
@@ -72,7 +73,9 @@ export default function UserManagement({ permission }: { permission: IPermission
                     <td className="px-4 py-2 border-t">{m.status}</td>
                     <td className="px-4 py-2 border-t">{m.created_at}</td>
                     <td className="px-4 py-2 border-t">
-                      <EditForm isAdmin={true} permission={permission} />
+                      <Link href="">
+                      view
+                      </Link>
                     </td>
                   </tr>
                 ))}

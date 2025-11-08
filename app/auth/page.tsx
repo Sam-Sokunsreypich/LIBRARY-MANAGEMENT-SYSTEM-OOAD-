@@ -11,7 +11,7 @@ export default async function Page() {
     redirect("/admin");
   } else if(role === "staff"){
     redirect("/staff");
-  } else if(role === "/user"){
+  } else if(role === "user"){
     redirect("/user");
   }
 
