@@ -16,7 +16,7 @@ export default function ProfilePage() {
 
   return (
     <>
-      <Bar /> {/* ✅ Top bar stays here */}
+      {/* <Bar />  */}
 
       <div className={styles.container}>
         <div className={styles.header}></div>

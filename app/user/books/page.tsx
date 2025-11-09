@@ -2,8 +2,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import BookCard from "../../components/ui/BookCard";
-import { Book } from "../../types/book";
+import BookCard from "../../../components/books/BookCard";
+import { Book } from "../../../types/book";
 import { Search } from 'lucide-react';
 
 // Updated book data to match the picture
