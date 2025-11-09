@@ -6,11 +6,10 @@ import SideNav from "../components/SideNav";
 import SearchBar from "./components/component/SearchBar";
 import { getMembers } from "./actions/fetchMembersClient";
 import CreateMember from "./components/create/CreateMember";
-import Link from "next/link";
-import EditForm from "./components/edit/EditorForm";
-import { IPermission } from "@/lib/types";
+import EditDialogForm from "./components/edit/EditDialog";
+import type { Permission } from "@/lib/types";
 
-export default function UserManagement({ permission }: { permission: IPermission }) {
+export default function UserManagement({member}: {member: Permission}) {
   const [role, setRole] = useState("user");
 
   const { data, isLoading, error } = useQuery({
@@ -73,9 +72,7 @@ export default function UserManagement({ permission }: { permission: IPermission
                     <td className="px-4 py-2 border-t">{m.status}</td>
                     <td className="px-4 py-2 border-t">{m.created_at}</td>
                     <td className="px-4 py-2 border-t">
-                      <Link href="">
-                      view
-                      </Link>
+                      <EditDialogForm member={m}/>
                     </td>
                   </tr>
                 ))}

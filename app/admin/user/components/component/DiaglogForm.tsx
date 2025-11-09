@@ -20,19 +20,14 @@ export default function DiaglogForm({
     return(
         <Dialog>
             <DialogTrigger asChild id={id}>
-                <div>
                     {Trigger}
-                </div>
             </DialogTrigger>
-            <DialogContent className="
-            ">
-                <div className="
-                ">
+            <DialogContent>
+
                     <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
                 {form}
-                </div>
             </DialogContent>
         </Dialog>
     )

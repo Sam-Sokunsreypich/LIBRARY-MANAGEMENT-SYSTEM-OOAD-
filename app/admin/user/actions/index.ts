@@ -70,27 +70,54 @@ export async function createMember(data: {
   return JSON.stringify(permissionResult);
 }
 
+//Fetch members data
+export async function fetchMembersWithPermissions() {
+    const supabase = await createSupabaseAdmin();
 
-//Update Member Name
+    // Fetch members
+    const { data: members, error: memberError } = await supabase
+        .from("members")
+        .select("*");
+
+    if (memberError) throw new Error(memberError.message);
+
+    // Fetch permissions
+    const { data: permissions, error: permissionError } = await supabase
+        .from("permissions")
+        .select("*");
+
+    if (permissionError) throw new Error(permissionError.message);
+
+    return { members, permissions };
+}
+
+//Update Member Basic ID
 export async function updateMemberBasicById(
-  id: string,
+  memberId: string,
   data: {
     name: string;
   }
 ){
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseAdmin();
 
-  const result = await supabase.from("member").update(data).eq("id", id);
+  const { error } = await supabase
+  .from("member")
+  .update({name: data.name})
+  .eq("id", memberId);
 
-  revalidatePath(" ");
-  
-  return JSON.stringify(result);
+  if(error){
+    console.error("Error updating member:", error.message);
+    return JSON.stringify({error});
+  }
+
+  revalidatePath("/admin/user");
+
+  return JSON.stringify({ success: true });
 }
 
-//Update Member Info By Admin
+//Update Member Info Advanced
 export async function updateMemberAdvanceById(
-  permission_id: string,
-  user_id: string,
+  member_id: string,
   data: {
     role: "user" | "staff" | "admin";
     status: "active" | "resigned";
@@ -106,7 +133,7 @@ export async function updateMemberAdvanceById(
   const supabaseAdmin = await createSupabaseAdmin();
 
   const updateResult = await supabaseAdmin.auth.admin.updateUserById(
-    user_id,
+    member_id,
     {user_metadata: {role: data.role}}
   );
   if(updateResult.error?.message){
@@ -116,9 +143,9 @@ export async function updateMemberAdvanceById(
     const result = await supabase
     .from("permission")
     .update(data)
-    .eq("id", permission_id);
+    .eq("member_id", member_id);
 
-    revalidatePath(" ");
+    revalidatePath("/admin/user");
 
     return JSON.stringify(result);
   }
@@ -126,11 +153,11 @@ export async function updateMemberAdvanceById(
 
 //
 export async function updateMemberAccountById(
-  user_id: string,
+  member_id: string,
   data: {
     email: string;
-    password?: string | undefined;
-    confirm?: string | undefined;
+    password?: string;
+    confirm?: string;
   }
 ){
   const { data:userSession } = await readUserSession();
@@ -142,17 +169,17 @@ export async function updateMemberAccountById(
 
   let updateObject: {
     email: string;
-    password?: string | undefined;
+    password?: string;
   } = { email: data.email };
 
   if( data.password ){
-    updateObject["password"] = data.password;
+    updateObject.password = data.password;
   }
 
   const supabaseAdmin = await createSupabaseAdmin();
 
   const updateResult = await supabaseAdmin.auth.admin.updateUserById(
-    user_id,
+    member_id,
     updateObject
   );
 
@@ -163,7 +190,7 @@ export async function updateMemberAccountById(
     const result = await supabase
     .from("member")
     .update({email: data.email})
-    .eq("id", user_id);
+    .eq("id", member_id);
     revalidatePath("");
     return JSON.stringify(result);
   }
