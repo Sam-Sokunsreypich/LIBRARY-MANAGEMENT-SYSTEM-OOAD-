@@ -1,7 +1,9 @@
-export default function UserPage(){
-    return (
-        <>
-        This is User page
-        </>
-    )
+import Navbar from "../components/nav/Navbar";
+
+export default function page() {
+  return (
+    <div>
+      <Navbar />
+    </div>
+  );
 }
