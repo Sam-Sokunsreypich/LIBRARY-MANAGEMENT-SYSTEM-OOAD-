@@ -2,6 +2,7 @@ import SideNav from "./components/SideNav";
 import ReactQueryProvider from "./providers/ReactQueryProvider";
 
 
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <ReactQueryProvider>
