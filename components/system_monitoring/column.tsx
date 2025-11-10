@@ -34,7 +34,7 @@ export const columns: ColumnDef<BookRequestType>[] = [
     },
   },
   {
-   accessorKey: "book_title",
+   accessorKey: "books.book_title",
     header: ({ column }) => {
       return (
         <Button
@@ -48,7 +48,8 @@ export const columns: ColumnDef<BookRequestType>[] = [
     },
   },
   {
-    accessorKey: "email",
+    id: "member.email",
+    accessorKey: "member.email",
     header: ({ column }) => {
       return (
         <Button
@@ -75,7 +76,7 @@ export const columns: ColumnDef<BookRequestType>[] = [
       )
     },
     cell: ({ row }) => {
-    const status = row.original.status;
+    const status = row.original.request_status.status_name;
 
     let color = "";
     switch (status) {
@@ -145,12 +146,12 @@ export const columns: ColumnDef<BookRequestType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.book_title)}
+              onClick={() => navigator.clipboard.writeText(payment.books.book_title)}
             >
               Copy Book Title
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.email)}
+              onClick={() => navigator.clipboard.writeText(payment.member.email)}
             >
               Copy Email
             </DropdownMenuItem>

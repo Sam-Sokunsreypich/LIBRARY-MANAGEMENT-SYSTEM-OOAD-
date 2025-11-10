@@ -168,7 +168,9 @@ import { DataTable } from "./data-table";
 
 
 export default async function TableMonitoring() {
-  const bookRequests = await getMonitoring(); 
+  const bookRequests = await getMonitoring();
+  
+  console.log('bookRequests', bookRequests)
   return (
       <>
       <div className="container mx-auto py-10">

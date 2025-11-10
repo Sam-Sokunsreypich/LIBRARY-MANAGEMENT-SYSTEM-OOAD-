@@ -4,7 +4,7 @@ export interface BookRequestType {
     request_status:{
         id:number;
         status_name:string;
-    }
+    };
     took_book: boolean;
     book_issue: boolean;
     fine: number;
@@ -13,9 +13,9 @@ export interface BookRequestType {
       email: string;
       name: string;
     };
-    book: {
+    books: {
       id: number;
-      title: string;
+      book_title: string;
     };
   }
   
