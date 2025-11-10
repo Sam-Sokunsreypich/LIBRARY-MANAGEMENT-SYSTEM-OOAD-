@@ -16,6 +16,8 @@ export interface BookRequestType {
     books: {
       id: number;
       book_title: string;
+      book_image:string
     };
+    reject_reason:string;
   }
   

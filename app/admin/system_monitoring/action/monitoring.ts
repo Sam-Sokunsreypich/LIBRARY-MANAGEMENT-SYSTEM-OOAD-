@@ -21,7 +21,8 @@ export async function getMonitoring(): Promise<BookRequestType[]> {
       ),
       books:book_id (
         id,
-        book_title
+        book_title,
+        book_image
       ),
       request_status:request_status_id (
         id,
