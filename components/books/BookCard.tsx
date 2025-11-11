@@ -5,7 +5,6 @@ import { useState } from "react"; // Import useState
 import Image from "next/image";
 import { Book } from "@/types/Book";
 
-
 export default function BookCard({ book }: { book: Book }) {
   // State to manage if the book is favorited
   const [isFavorited, setIsFavorited] = useState(false);
@@ -16,7 +15,7 @@ export default function BookCard({ book }: { book: Book }) {
   };
 
   return (
-    <div className="group flex flex-col w-full max-w-[160px]">
+    <div className="group flex flex-col w-full max-w-160">
       {/* Book Cover with Hover Effect */}
       <div className="relative w-full overflow-hidden rounded-md shadow-md bg-white transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-xl">
         <div className="relative w-full h-0 pb-[150%]">

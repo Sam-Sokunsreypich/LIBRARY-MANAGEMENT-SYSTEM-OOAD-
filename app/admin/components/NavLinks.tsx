@@ -20,8 +20,8 @@ export default function NavLinks(){
             text: "Books",
         },
         {
-            href: "/admin/fine",
-            text: "Fine & Payment",
+            href: "/admin/rule_of_fine",
+            text: "Rule Management",
         }
     ];
 

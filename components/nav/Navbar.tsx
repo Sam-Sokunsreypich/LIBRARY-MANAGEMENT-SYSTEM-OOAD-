@@ -58,7 +58,7 @@ export default function Navbar() {
               <button className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <Image
                   className="h-8 w-8 rounded-full"
-                  src="https://picsum.photos/seed/user-avatar/200/200.jpg"
+                  src=""
                   alt="User Avatar"
                   width={32}
                   height={32}

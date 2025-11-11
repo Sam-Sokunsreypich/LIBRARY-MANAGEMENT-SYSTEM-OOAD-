@@ -18,7 +18,7 @@ export default function Bar() {
         <div className="flex justify-between items-center h-16">
 
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="">
             <Link href="/" className="text-xl font-bold text-indigo-600">
               LibraryMS
             </Link>

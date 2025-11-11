@@ -62,12 +62,13 @@ export default function AuthForm() {
 	}
 
 	return (
-		<div className="w-96">
+		<div className="w-100 h-80 rounded-xl border border-gray-500 p-5 bg-white">
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-full space-y-6"
+					className="w-full space-y-6 "
 				>
+					<FormLabel className="flex justify-center text-lg">Login Account</FormLabel>
 					<FormField
 						control={form.control}
 						name="email"
@@ -75,7 +76,9 @@ export default function AuthForm() {
 							<FormItem>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input placeholder="shadcn" {...field} />
+									<Input 
+									placeholder="example@gmail.com" {...field}
+									className="border border-gray-500" />
 								</FormControl>
 
 								<FormMessage />
@@ -90,9 +93,10 @@ export default function AuthForm() {
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="shadcn"
+										placeholder="******"
 										{...field}
 										type="password"
+										className="border border-gray-500"
 									/>
 								</FormControl>
 								<FormDescription>
@@ -107,11 +111,18 @@ export default function AuthForm() {
 					<Button
 						type="submit"
 						variant="outline"
-						className="w-full flex items-center gap-2"
+						className="
+						w-full flex items-center 
+						gap-2 bg-amber-200
+						text-amber-700 
+						border-2 border-amber-600
+						hover:bg-amber-500 hover:text-amber-50
+						transition duration-75"
 					>
 						Login{" "}
 						<AiOutlineLoading3Quarters
 							className={cn("animate-spin", {
+								isPending,
 								hidden: true,
 							})}
 						/>
