@@ -2,73 +2,93 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { createSupabaseAdmin } from "@/lib/supabase";
+import { BookRequestType } from "@/types/BookRequestType";
+import { getMonitoring } from "@/app/admin/system_monitoring/action/monitoring";
 
 // ✅ Supabase client setup
-const supabase = await createSupabaseAdmin()
+// const supabase = await createSupabaseAdmin()
 
-interface ReturnRecord {
-  id: number;
-  user: string;
-  book: string;
-  due: string;
-  returnDate: string | null;
-  condition: string | null;
-  status: string;
-}
+// interface ReturnRecord {
+//   id: number;
+//   user: string;
+//   book: string;
+//   due: string;
+//   returnDate: string | null;
+//   condition: string | null;
+//   status: string;
+// }
 
 export default function ReturnBookPage() {
-  const [records, setRecords] = useState<ReturnRecord[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [records, setRecords] = useState<ReturnRecord[]>([]);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchReturnRecords();
-  }, []);
+  // useEffect(() => {
+  //   fetchReturnRecords();
+  // }, []);
 
-  // 🧩 Fetch Return Book Data from Supabase
-  const fetchReturnRecords = async () => {
-    setLoading(true);
+  // // 🧩 Fetch Return Book Data from Supabase
+  // const fetchReturnRecords = async () => {
+  //   setLoading(true);
 
-    const { data, error } = await supabase
-      .from("book_request")
-      .select(`
-        id,
-        created_at,
-        took_book,
-        book_issue,
-        member:member_id(name),
-        book:book_id(book_title)
-      `)
-      .order("id", { ascending: true });
+  //   const { data, error } = await supabase
+  //     .from("book_request")
+  //     .select(`
+  //       id,
+  //       created_at,
+  //       took_book,
+  //       book_issue,
+  //       member:member_id(name),
+  //       book:book_id(book_title)
+  //     `)
+  //     .order("id", { ascending: true });
 
-    if (error) {
-      console.error("❌ Error fetching return data:", error);
-      setLoading(false);
-      return;
+  //   if (error) {
+  //     console.error("❌ Error fetching return data:", error);
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   // 🧠 Transform raw data into table-friendly format
+  //   const transformed = data.map((r: any) => {
+  //     const isReturned = r.request_status_id === 3 || r.took_book === true;
+  //     const status = isReturned ? "Returned" : "Not Return";
+
+  //     return {
+  //       id: r.id,
+  //       user: r.member?.name || "Unknown",
+  //       book: r.book?.book_title || "Unknown",
+  //       due: new Date(r.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+  //       returnDate: isReturned ? new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "...",
+  //       condition: isReturned ? "Good" : "...",
+  //       status,
+  //     };
+  //   });
+
+  //   setRecords(transformed);
+  //   setLoading(false);
+  // };
+
+  // if (loading) {
+  //   return <p className="text-gray-500">Loading return records...</p>;
+  // }
+
+  const [records, setRequest] = useState<BookRequestType[]>([]);
+  const [loading, setLoading] = useState(true)
+  
+  useEffect( ()=>{
+    async function fetchRequests() {
+      try {
+        const res = await getMonitoring();
+        
+        setRequest(res.filter((r)=>r.request_status.status_name === "PENDING"));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     }
-
-    // 🧠 Transform raw data into table-friendly format
-    const transformed = data.map((r: any) => {
-      const isReturned = r.request_status_id === 3 || r.took_book === true;
-      const status = isReturned ? "Returned" : "Not Return";
-
-      return {
-        id: r.id,
-        user: r.member?.name || "Unknown",
-        book: r.book?.book_title || "Unknown",
-        due: new Date(r.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-        returnDate: isReturned ? new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "...",
-        condition: isReturned ? "Good" : "...",
-        status,
-      };
-    });
-
-    setRecords(transformed);
-    setLoading(false);
-  };
-
-  if (loading) {
-    return <p className="text-gray-500">Loading return records...</p>;
-  }
+    fetchRequests();
+  }, []);
 
   return (
     <div>

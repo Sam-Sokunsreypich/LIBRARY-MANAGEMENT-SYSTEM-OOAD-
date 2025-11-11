@@ -56,13 +56,13 @@ export default function Navbar() {
             <div className="relative">
               <Link href="/user/setting">
               <button className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <Image
+                {/* <Image
                   className="h-8 w-8 rounded-full"
                   src="https://picsum.photos/seed/user-avatar/200/200.jpg"
                   alt="User Avatar"
                   width={32}
                   height={32}
-                />
+                /> */}
                 <ChevronDown className="ml-1 h-4 w-4 text-gray-500" />
               </button>
               </Link>
