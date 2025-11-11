@@ -46,11 +46,10 @@ export default function StaffLayout({ children }: { children: ReactNode }) {
       {/* Main Section */}
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
-        <header className="flex justify-between items-center bg-white px-6 py-3 border-b">
-          <h1 className="text-xl font-bold text-gray-800">
-            👋 Welcome back, {staffName}!
+        {/* <header className="flex justify-between items-center bg-orange-500 px-6 py-3 border-b">
+          <h1 className="text-xl font-bold text-white">
+            Welcome , {staffName}
           </h1>
-
           <div className="flex items-center gap-4">
             <NotificationBell count={notifications} />
             <Link
@@ -63,7 +62,7 @@ export default function StaffLayout({ children }: { children: ReactNode }) {
               <span className="font-medium text-gray-700">Profile</span>
             </Link>
           </div>
-        </header>
+        </header> */}
 
         {/* Page Content */}
         <main className="p-6 flex-1">{children}</main>
