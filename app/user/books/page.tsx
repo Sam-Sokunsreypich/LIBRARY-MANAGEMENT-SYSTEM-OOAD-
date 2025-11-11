@@ -1,4 +1,3 @@
-// app/search/page.tsx
 "use client";
 
 import BookCard from "@/components/books/BookCard";
