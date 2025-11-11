@@ -34,7 +34,7 @@ useEffect( ()=>{
           <h2 className='text-gray-800 font-bold text-3xl '>Management Book Request</h2> 
 
         </div>
-        <div className='mt-20 w-full grid grid-cols-2 gap-3'>
+        <div className='mt-20 w-full grid grid-cols-1 gap-3'>
         {request.map((request) => (
         <BookRequestCard
           key={request.id}

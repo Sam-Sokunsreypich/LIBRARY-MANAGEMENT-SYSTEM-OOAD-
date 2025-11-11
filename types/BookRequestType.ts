@@ -19,5 +19,7 @@ export interface BookRequestType {
       book_image:string
     };
     reject_reason:string;
+    start_date: string;
+    end_date:string;
   }
   

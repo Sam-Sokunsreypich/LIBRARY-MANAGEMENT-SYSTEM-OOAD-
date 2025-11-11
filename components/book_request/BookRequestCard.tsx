@@ -27,13 +27,14 @@ interface Props {
 export default function BookRequestCard({ borrowRequest }: Props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  async function onApprove() {
+  async function onApprove(data: { start_date: string; end_date: string }) {
     try{
       if (!borrowRequest?.id) {
         toast.error("Missing request ID!");
         return;
       }
-      await approveRequest(borrowRequest.id);
+      await approveRequest(borrowRequest.id, data);
+      setIsEditModalOpen(false)
       toast.success("Rule Approved successfully!");
     }catch (error) {
       console.error(error);
@@ -51,9 +52,8 @@ export default function BookRequestCard({ borrowRequest }: Props) {
               </p>
 
       <CardHeader>
-        <CardTitle>{borrowRequest.books.book_title}</CardTitle>
 
-        <CardDescription className="flex flex-col gap-2 mt-2">
+        <CardDescription className="flex flex-col gap-4 mt-2">
           <div className="flex items-start gap-4">
             <Image
               src={borrowRequest.books.book_image || "/placeholder-book.png"}
@@ -63,7 +63,10 @@ export default function BookRequestCard({ borrowRequest }: Props) {
               className="rounded-md object-cover"
             />
 
-            <div className="flex flex-col gap-1 flex-1">
+            <div className="flex flex-col justify-between gap-1 flex-1">
+            <p className="text-lg font-semibold">
+          {borrowRequest.books.book_title}
+        </p>
               <p className="text-sm text-muted-foreground">
                 Requested by:
               </p>
@@ -71,8 +74,9 @@ export default function BookRequestCard({ borrowRequest }: Props) {
 
               
 
-              <div
-        className={`w-20 flex justify-center px-2 py-1 text-xs font-semibold rounded-full 
+             <div className='flex flex-row justify-between'>
+             <div
+        className={`w-20 h-8 flex justify-center px-2 pt-2 text-xs font-semibold rounded-2xl 
         ${
           borrowRequest.request_status.status_name === "Approved"
             ? "bg-green-100 text-green-700"
@@ -83,8 +87,7 @@ export default function BookRequestCard({ borrowRequest }: Props) {
       >
         {borrowRequest.request_status.status_name}
       </div>
-
-              <div className="flex gap-2 mt-2 justify-end">
+      <div className="flex gap-4 mt-2 justify-end">
                 <ApproveRequest
                 onApprove={onApprove}
                 />
@@ -96,6 +99,10 @@ export default function BookRequestCard({ borrowRequest }: Props) {
                   Reject
                 </Button>
               </div>
+              
+             </div>
+
+      
             </div>
           </div>
 

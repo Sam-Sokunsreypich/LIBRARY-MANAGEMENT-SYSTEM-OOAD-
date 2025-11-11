@@ -5,72 +5,7 @@ import { createSupabaseAdmin } from "@/lib/supabase";
 import { BookRequestType } from "@/types/BookRequestType";
 import { getMonitoring } from "@/app/admin/system_monitoring/action/monitoring";
 
-// ✅ Supabase client setup
-// const supabase = await createSupabaseAdmin()
-
-// interface ReturnRecord {
-//   id: number;
-//   user: string;
-//   book: string;
-//   due: string;
-//   returnDate: string | null;
-//   condition: string | null;
-//   status: string;
-// }
-
 export default function ReturnBookPage() {
-  // const [records, setRecords] = useState<ReturnRecord[]>([]);
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   fetchReturnRecords();
-  // }, []);
-
-  // // 🧩 Fetch Return Book Data from Supabase
-  // const fetchReturnRecords = async () => {
-  //   setLoading(true);
-
-  //   const { data, error } = await supabase
-  //     .from("book_request")
-  //     .select(`
-  //       id,
-  //       created_at,
-  //       took_book,
-  //       book_issue,
-  //       member:member_id(name),
-  //       book:book_id(book_title)
-  //     `)
-  //     .order("id", { ascending: true });
-
-  //   if (error) {
-  //     console.error("❌ Error fetching return data:", error);
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   // 🧠 Transform raw data into table-friendly format
-  //   const transformed = data.map((r: any) => {
-  //     const isReturned = r.request_status_id === 3 || r.took_book === true;
-  //     const status = isReturned ? "Returned" : "Not Return";
-
-  //     return {
-  //       id: r.id,
-  //       user: r.member?.name || "Unknown",
-  //       book: r.book?.book_title || "Unknown",
-  //       due: new Date(r.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-  //       returnDate: isReturned ? new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "...",
-  //       condition: isReturned ? "Good" : "...",
-  //       status,
-  //     };
-  //   });
-
-  //   setRecords(transformed);
-  //   setLoading(false);
-  // };
-
-  // if (loading) {
-  //   return <p className="text-gray-500">Loading return records...</p>;
-  // }
 
   const [records, setRequest] = useState<BookRequestType[]>([]);
   const [loading, setLoading] = useState(true)
@@ -90,6 +25,7 @@ export default function ReturnBookPage() {
     fetchRequests();
   }, []);
 
+  console.log('records', records)
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Return Management</h1>

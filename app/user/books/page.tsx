@@ -3,8 +3,9 @@
 
 import { useState, useMemo } from "react";
 import BookCard from "../../../components/books/BookCard";
-import { Book } from "../../../types/book";
+// import { Book } from "@/types/Book";
 import { Search } from 'lucide-react';
+import { Book } from "@/types/book";
 
 // Updated book data to match the picture
 const allBooks: Book[] = [

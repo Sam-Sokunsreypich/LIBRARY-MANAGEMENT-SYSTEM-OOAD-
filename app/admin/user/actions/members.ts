@@ -12,8 +12,8 @@ interface Member{
 
 interface Permissions{
     member_id: string;
-    role: "admin" | "user" | "staff" | "unknown";
-    status: "active" | "resigned" | "unknown";
+    role: "admin" | "user" | "staff";
+    status: "active" | "resigned";
 }
 
 interface CombinedMember extends Member{

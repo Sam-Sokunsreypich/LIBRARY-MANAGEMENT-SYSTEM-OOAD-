@@ -1,5 +1,4 @@
-import type { NextConfig } from "next";
-// /** @type {import('next').NextConfig} */
+//  @type {import('next').NextConfig} 
 const nextConfig = {
   // images: {
   //   remotePatterns: [
@@ -16,10 +15,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'dthcmidmavrmnaqfixee.supabase.co',
-        port: '', // leave blank
-        pathname: '/storage/v1/object/public/**',
+        pathname: '**',
       },
     ],
+  },
+  experimental: {
+    serverActions: true,
   },
 };
 

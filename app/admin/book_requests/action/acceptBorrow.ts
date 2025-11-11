@@ -1,6 +1,7 @@
 "use server"
 
 import { createSupabaseAdmin } from "@/lib/supabase"
+import { BookRequestType } from "@/types/BookRequestType"
 
 export async function rejectRequest(
   id: number,
@@ -25,7 +26,11 @@ export async function rejectRequest(
   return { message: "Reject updated successfully!" }
 }
 
-export async function approveRequest(id: number) {
+export async function approveRequest(id: number,
+  data:{
+    start_date: string,
+    end_date: string,
+  }) {
   const supabase = await createSupabaseAdmin()
 
   const { error } = await supabase
@@ -33,8 +38,10 @@ export async function approveRequest(id: number) {
     .update({
       request_status_id: 2,
       took_book: "false",
+      start_date: data.start_date,
+      end_date: data.end_date
     })
-    .eq("id", id)
+    .eq("id",id)
 
   if (error) {
     console.error("Error approving request:", error.message)
