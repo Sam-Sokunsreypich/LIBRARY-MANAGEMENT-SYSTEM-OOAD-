@@ -30,7 +30,11 @@ export default function Navbar() {
                 <Home className="w-4 h-4 mr-1" />
                 Home page
               </Link>
-              <Link href="/borrowing" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              <Link href="/user/books" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                <BookOpen className="w-4 h-4 mr-1" />
+                Books
+              </Link>
+              <Link href="/borrowing" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
                 <BookOpen className="w-4 h-4 mr-1" />
                 Borrowing Center
               </Link>
@@ -50,6 +54,7 @@ export default function Navbar() {
 
             {/* User Avatar */}
             <div className="relative">
+              <Link href="/user/setting">
               <button className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <Image
                   className="h-8 w-8 rounded-full"
@@ -60,6 +65,7 @@ export default function Navbar() {
                 />
                 <ChevronDown className="ml-1 h-4 w-4 text-gray-500" />
               </button>
+              </Link>
             </div>
 
             {/* Mobile menu button */}
@@ -81,6 +87,9 @@ export default function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link href="/" className="text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
               Home page
+            </Link>
+            <Link href="/books" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
+              Books
             </Link>
             <Link href="/borrowing" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
               Borrowing Center

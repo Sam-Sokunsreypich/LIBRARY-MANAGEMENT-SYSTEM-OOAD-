@@ -1,19 +1,23 @@
-import Link from "next/link";
-import AuthForm from "./auth/components/AuthForm";
 import { readUserSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
+import AuthForm from "./auth/components/AuthForm";
 
-export default async function Home() {
+export default async function Page() {
   const { data: userSession } = await readUserSession();
-    
-      if (userSession.session) {
-        redirect("/admin");
-      }
-  return (
-    
-    <div>
-      <AuthForm/>
-    </div>
 
+  const role = userSession?.session?.user?.user_metadata?.role;
+
+  if(role === "admin"){
+    redirect("/admin");
+  } else if(role === "staff"){
+    redirect("/staff");
+  } else if(role === "user"){
+    redirect("/user");
+  }
+
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <AuthForm />
+    </div>
   );
 }

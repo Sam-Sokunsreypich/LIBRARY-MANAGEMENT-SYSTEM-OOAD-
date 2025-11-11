@@ -5,68 +5,73 @@ import SideNav from '../components/SideNav'
 import { Button } from '@/components/ui/button'
 import { CirclePlus } from 'lucide-react'
 import CreateFine from '@/components/rule_of_fine/CreateFine'
+import { RuleType } from '@/types/RuleType'
+import { getRule } from './action/rule'
 
-const initialRuleData: RuleType[] = [
-  {
-    id: 1,
-    title: "Late Return",
-    description: "Books must be returned by the due date. Late returns will incur a fine per day.",
-    fine: 0.5
-  },
-  {
-    id: 2,
-    title: "Lost or Damaged Book",
-    description: "If a book is lost or returned with significant damage, the borrower must pay the replacement cost.",
-    fine: 10
-  },
-  {
-    id: 3,
-    title: "Unauthorized Lending",
-    description: "Borrowers must not lend library books to others without permission.",
-    fine: 5
-  },
-  {
-    id: 4,
-    title: "Writing or Marking on Books",
-    description: "Writing, highlighting, or marking inside books is strictly prohibited.",
-    fine: 3
-  },
-  {
-    id: 5,
-    title: "Failure to Renew on Time",
-    description: "Books must be renewed before the due date to avoid late fees.",
-    fine: 0.25
-  },
-  {
-    id: 6,
-    title: "Borrowing Without Valid ID",
-    description: "Only registered members with a valid library ID can borrow books.",
-    fine: 2
-  },
-  {
-    id: 7,
-    title: "Tampering with Book Barcode or Label",
-    description: "Removing or altering book barcodes or library labels is prohibited.",
-    fine: 10
-  }
-];
+// const initialRuleData: RuleType[] = [
+//   {
+//     id: 1,
+//     title: "Late Return",
+//     description: "Books must be returned by the due date. Late returns will incur a fine per day.",
+//     fine: 0.5
+//   },
+//   {
+//     id: 2,
+//     title: "Lost or Damaged Book",
+//     description: "If a book is lost or returned with significant damage, the borrower must pay the replacement cost.",
+//     fine: 10
+//   },
+//   {
+//     id: 3,
+//     title: "Unauthorized Lending",
+//     description: "Borrowers must not lend library books to others without permission.",
+//     fine: 5
+//   },
+//   {
+//     id: 4,
+//     title: "Writing or Marking on Books",
+//     description: "Writing, highlighting, or marking inside books is strictly prohibited.",
+//     fine: 3
+//   },
+//   {
+//     id: 5,
+//     title: "Failure to Renew on Time",
+//     description: "Books must be renewed before the due date to avoid late fees.",
+//     fine: 0.25
+//   },
+//   {
+//     id: 6,
+//     title: "Borrowing Without Valid ID",
+//     description: "Only registered members with a valid library ID can borrow books.",
+//     fine: 2
+//   },
+//   {
+//     id: 7,
+//     title: "Tampering with Book Barcode or Label",
+//     description: "Removing or altering book barcodes or library labels is prohibited.",
+//     fine: 10
+//   }
+// ];
 
 
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [rules, setRules] = useState<RuleType[]>([])
   const [loading, setLoading] = useState(true)
+  const [rules, setRules] = useState<RuleType[]>([]);
 
-  // useEffect(()=>{
-  //   const getRules = async ()=>{
-  //   setLoading(true)
-  //   const {data, error} = await supabase.from('rules').select('*')
-  //  if (error) console.error(error)
-  //     else setRules(data)
-  //     setLoading(false)
-  // }
-  // getRules()
-  // },[])
+  useEffect(() => {
+  async function fetchRules() {
+    try {
+      const res = await getRule();
+      setRules(res);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchRules();
+}, []);
 
   return (
     <div className='flex min-h-screen'>
@@ -85,7 +90,7 @@ export default function Page() {
         />
         </div>
       <div className='ml-8 mr-12 grid grid-cols-3 gap-5'>
-        {initialRuleData.map((rule) => (
+        {rules.map((rule) => (
         <RuleCard
           key={rule.id}
           ruleData={rule}

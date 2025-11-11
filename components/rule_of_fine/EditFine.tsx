@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
+import { toast } from 'sonner'
+import { getRule, updateRule } from '@/app/admin/rule_of_fine/action/rule'
 
 interface EditRuleProps{
     open : boolean,
@@ -26,6 +28,7 @@ interface EditRuleProps{
 
 
 const formSchema = z.object({
+  id: z.number(),
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
   }),
@@ -47,15 +50,28 @@ export default function EditFine({open, onOpenChange, defaultValues, onSubmitDat
     },
   })
 
-  useEffect(() => {
+   useEffect(() => {
     if (defaultValues) {
-      form.reset(defaultValues)
+      form.reset(defaultValues);
     }
-  }, [defaultValues, form])
+  }, [defaultValues, form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    setIsModalOpen(false)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      if (!defaultValues?.id) {
+        toast.error("Missing rule ID!");
+        return;
+      }
+
+      await updateRule(defaultValues.id, values);
+      toast.success("Rule updated successfully!");
+      onSubmitData?.({ ...values, id: defaultValues.id });
+      onOpenChange(false);
+      await getRule();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update rule");
+    }
   }
   
 
