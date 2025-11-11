@@ -45,7 +45,7 @@ export default function FinePaymentPage() {
       .order("id", { ascending: true });
 
     if (error) {
-      console.error("❌ Error fetching fines:", error);
+      console.error("Error fetching fines:", error);
       setLoading(false);
       return;
     }
@@ -75,7 +75,7 @@ export default function FinePaymentPage() {
       .eq("id", id);
 
     if (error) {
-      console.error("❌ Error updating payment:", error);
+      console.error("Error updating payment:", error);
       return;
     }
 

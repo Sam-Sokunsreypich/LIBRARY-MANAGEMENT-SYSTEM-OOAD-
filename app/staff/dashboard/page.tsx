@@ -34,7 +34,7 @@ export default function DashboardPage() {
 
       // 🔍 Better error message
       if (error) {
-        console.error("❌ Supabase fetch error:", {
+        console.error("Supabase fetch error:", {
           message: error.message,
           details: error.details,
           hint: error.hint,
@@ -42,13 +42,13 @@ export default function DashboardPage() {
         return;
       }
 
-      // ⚠️ No data case
+      //  No data case
       if (!data) {
-        console.warn("⚠️ No data returned from Supabase query.");
+        console.warn(" No data returned from Supabase query.");
         return;
       }
 
-      // ✅ Count categories
+      //  Count categories
       const pending = data.filter((r) => r.request_status_id === 1).length;
       const borrowed = data.filter((r) => r.request_status_id === 2).length;
       const returned = data.filter((r) => r.request_status_id === 3).length;
@@ -60,11 +60,11 @@ export default function DashboardPage() {
 
       setCounts({ pending, borrowed, returned, overdue });
     } catch (err) {
-      console.error("💥 Unexpected runtime error:", err);
+      console.error("Unexpected runtime error:", err);
     }
   };
 
-  // 📊 Static chart data (simple Tailwind bar chart)
+  //  Static chart data (simple Tailwind bar chart)
   const chartData = [
     { label: "Pending", color: "bg-yellow-400", value: counts.pending },
     { label: "Borrowed", color: "bg-green-500", value: counts.borrowed },
@@ -74,9 +74,9 @@ export default function DashboardPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">📊 Dashboard Overview</h1>
+      <h1 className="text-2xl font-bold mb-6"> Dashboard Overview</h1>
 
-      {/* 📦 Statistic cards */}
+      {/*  Statistic cards */}
       <div className="grid grid-cols-4 gap-4 mb-10">
         <div className="bg-white p-4 rounded shadow text-center">
           <p className="text-gray-600 font-medium">Pending</p>
@@ -96,7 +96,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* 📈 Static Bar Diagram */}
+      {/*  Static Bar Diagram */}
       <div className="bg-white p-6 rounded shadow">
         <h2 className="text-lg font-semibold mb-4 text-gray-800">📈 Check-out Statistics</h2>
 

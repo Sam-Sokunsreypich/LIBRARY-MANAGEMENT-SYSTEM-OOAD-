@@ -43,7 +43,7 @@ export default function OverdueBookPage() {
       `);
 
     if (error) {
-      console.error("❌ Error fetching overdue books:", error);
+      console.error("Error fetching overdue books:", error);
       setLoading(false);
       return;
     }
@@ -123,7 +123,7 @@ export default function OverdueBookPage() {
             {overdueData.length === 0 && (
               <tr>
                 <td colSpan={6} className="text-center py-3 text-gray-400">
-                  No overdue books at the moment 🎉
+                  No overdue books at the moment 
                 </td>
               </tr>
             )}
