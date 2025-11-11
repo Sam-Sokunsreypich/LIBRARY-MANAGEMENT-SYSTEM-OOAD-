@@ -19,13 +19,13 @@ export default function BookCard({ book }: { book: Book }) {
       {/* Book Cover with Hover Effect */}
       <div className="relative w-full overflow-hidden rounded-md shadow-md bg-white transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-xl">
         <div className="relative w-full h-0 pb-[150%]">
-          <Image
+          {/* <Image
             src={book.book_description || "/placeholder-book.png"}
             alt={`${book.book_title} cover`}
             fill
             className="object-cover"
             sizes="(max-width: 160px) 100vw, 160px"
-          />
+          /> */}
         </div>
       </div>
 

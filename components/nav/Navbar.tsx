@@ -38,10 +38,10 @@ export default function Navbar() {
                 <BookOpen className="w-4 h-4 mr-1" />
                 Borrowing Center
               </Link>
-              <Link href="/favorites" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              {/* <Link href="/favorites" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
                 <Heart className="w-4 h-4 mr-1" />
                 Favorites
-              </Link>
+              </Link> */}
             </div>
           </div>
 

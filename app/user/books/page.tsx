@@ -1,9 +1,9 @@
 // app/search/page.tsx
 "use client";
 
+import BookCard from "@/components/books/BookCard";
+import SearchBar from "@/components/ui/SearchBar";
 import { useState, useMemo } from "react";
-import BookCard from "../../../components/ui/BookCard";
-import SearchBar from "../../../components/ui/SearchBar";
 
 // The new, updated Book interface (for reference)
 interface Book {
@@ -52,6 +52,8 @@ const allBooks: Book[] = [
     publication_year: 1895,
     subCategory_id: "sub_1",
     book_description: "The Time Machine is a science fiction novella by H. G. Wells, published in 1895 and written as a frame narrative.",
+    publisher: "William Heinemann",
+    pages: 118,
   },
   {
     book_id: "3",
@@ -144,13 +146,13 @@ export default function SearchPage() {
                 // Transform the data to match BookCard's expected props
                 book_id: book.book_id,
                 book_title: book.book_title,
-                author_name: authors[book.author_id as keyof typeof authors], // Fetch author name
+                author_id: authors[book.author_id as keyof typeof authors], // Fetch author name
                 book_image: book.book_image,
                 book_total: book.book_total,
                 publication_year: book.publication_year,
                 book_description: book.book_description,
-                publisher: book.publisher,
-                pages: book.pages,
+                // publisher: book.publisher,
+                // pages: book.pages,
               }}
             />
           ))}
