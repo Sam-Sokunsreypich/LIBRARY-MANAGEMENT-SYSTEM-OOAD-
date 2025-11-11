@@ -26,7 +26,7 @@ useEffect( ()=>{
   fetchRequests();
 }, []);
 
-
+console.log('request', request)
   return (
     <div className=' min-h-screen w-full'>
         <div className='ml-64 mb-20 mr-10'>

@@ -62,54 +62,54 @@ export const columns: ColumnDef<BookRequestType>[] = [
       )
     },
   },
-  {
-    accessorKey: "status",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Status
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-    const status = row.original.request_status.status_name;
+//   {
+//     accessorKey: "status",
+//     header: ({ column }) => {
+//       return (
+//         <Button
+//           variant="ghost"
+//           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+//         >
+//           Status
+//           <ArrowUpDown className="ml-2 h-4 w-4" />
+//         </Button>
+//       )
+//     },
+//     cell: ({ row }) => {
+//     const status = row.original.request_status.status_name;
 
-    let color = "";
-    switch (status) {
-      case "PENDING":
-        color = "bg-yellow-500";
-        break;
-      case "APPROVED":
-        color = "bg-green-500";
-        break;
-      case "REJECTED":
-        color = "bg-red-500";
-        break;
-      case "RETURNED":
-        color = "bg-blue-500";
-        break;
-      default:
-        color = "bg-gray-500";
-    }
-    const flex = "flex items-center gap-2"
-    const weight = "w-2 h-2 rounded-full"
-    return (
-      <span className={`${flex}`} >
-        <div className={`${weight} ${color}`}></div>
-        <span>{status}</span>
-      </span>
-    );
-  }
-  },
-  // {
-  //   accessorKey: "took_book",
-  //   header: "Took book?",
-  //   cell: ({ row }) => (row.original.took_book ? "Yes" : ""),
-  // },
+//     let color = "";
+//     switch (status) {
+//       case "PENDING":
+//         color = "bg-yellow-500";
+//         break;
+//       case "APPROVED":
+//         color = "bg-green-500";
+//         break;
+//       case "REJECTED":
+//         color = "bg-red-500";
+//         break;
+//       case "RETURNED":
+//         color = "bg-blue-500";
+//         break;
+//       default:
+//         color = "bg-gray-500";
+//     }
+//     const flex = "flex items-center gap-2"
+//     const weight = "w-2 h-2 rounded-full"
+//     return (
+//       <span className={`${flex}`} >
+//         <div className={`${weight} ${color}`}></div>
+//         <span>{status}</span>
+//       </span>
+//     );
+//   }
+//   },
+//   {
+//     accessorKey: "took_book",
+//     header: "Took book?",
+//     cell: ({ row }) => (row.original.took_book ? "Yes" : ""),
+//   },
    {
     accessorKey: "book_issue",
     header: "Has issue?",

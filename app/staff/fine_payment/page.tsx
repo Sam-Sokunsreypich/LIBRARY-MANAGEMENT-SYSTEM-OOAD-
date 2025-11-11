@@ -1,96 +1,56 @@
 "use client";
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-import FineTable from "../components/FineTable";
+import { BookRequestType } from "@/types/BookRequestType";
+import { getMonitoring } from "@/app/admin/system_monitoring/action/monitoring";
+import TableBookReturn from "@/components/book_return/TableBookReturn";
 
-// ✅ Supabase client setup
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+export default function ReturnBookPage() {
 
-interface FineRecord {
-  id: number;
-  user: string;
-  bookTitle: string;
-  issue: string;
-  amount: number;
-  isPaid: boolean;
-}
-
-export default function FinePaymentPage() {
-  const [fines, setFines] = useState<FineRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch all fines on mount
-  useEffect(() => {
-    fetchFines();
+  const [requestpaid, setRequestpaid] = useState<BookRequestType[]>([]);
+  const [requestNotPaid, setRequestNotPaid] = useState<BookRequestType[]>([]);
+  const [loading, setLoading] = useState(true)
+  
+  useEffect( ()=>{
+    async function fetchRequests() {
+      try {
+        const res = await getMonitoring();
+        
+        setRequestNotPaid(res.filter((r)=>r.pay_fine === false));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchRequests();
   }, []);
 
-  // 🧩 Fetch fines from Supabase
-  const fetchFines = async () => {
-    setLoading(true);
-
-    const { data, error } = await supabase
-      .from("book_request")
-      .select(`
-        id,
-        fine: fine (fine, title),
-        member: member_id (name),
-        book: book_id (book_title),
-        request_status_id,
-        book_issue,
-        took_book
-      `)
-      .order("id", { ascending: true });
-
-    if (error) {
-      console.error("❌ Error fetching fines:", error);
-      setLoading(false);
-      return;
+  useEffect( ()=>{
+    async function fetchRequests() {
+      try {
+        const res = await getMonitoring();
+        
+        setRequestpaid(res.filter((r)=>r.pay_fine === true));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     }
-
-    // 🧠 Transform data to frontend-friendly format
-    const formatted = data.map((r: any) => {
-      const isPaid = r.request_status_id === 4 || r.took_book === true; // Example condition (you can adjust)
-      return {
-        id: r.id,
-        user: r.member?.name || "Unknown",
-        bookTitle: r.book?.book_title || "Untitled",
-        issue: r.book_issue ? "Book Damage" : r.fine?.title || "Overdue",
-        amount: r.fine?.fine || 0,
-        isPaid,
-      };
-    });
-
-    setFines(formatted);
-    setLoading(false);
-  };
-
-  // 💳 Handle Payment (update isPaid)
-  const handlePayment = async (id: number) => {
-    const { error } = await supabase
-      .from("book_request")
-      .update({ request_status_id: 4 }) // Example: 4 = Paid
-      .eq("id", id);
-
-    if (error) {
-      console.error("❌ Error updating payment:", error);
-      return;
-    }
-
-    // Update local state for instant feedback
-    setFines((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, isPaid: true } : f))
-    );
-  };
-
-  if (loading) return <p className="text-gray-500">Loading fine data...</p>;
-
+    fetchRequests();
+  }, []);
+  
+  
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Fine & Payment Management</h1>
-      <FineTable fines={fines} onPay={handlePayment} />
-    </div>
+      <div className=' mb-20 w-full '>
+          <div>
+          <h2 className='text-gray-800 font-bold text-3xl '>Fine haven't paid</h2> 
+          <TableBookReturn requests={requestNotPaid}/>
+          </div>
+          <div>
+          <h2 className='text-gray-800 font-bold text-3xl '>Fine already paid</h2> 
+          <TableBookReturn requests={requestpaid}/>
+          </div>
+        </div>
   );
 }
