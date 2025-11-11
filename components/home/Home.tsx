@@ -4,10 +4,10 @@ import {
   ClockIcon,
   InboxArrowDownIcon,
   ReceiptRefundIcon,
-} from "@heroicons/react/24/solid"; // or /24/outline, /20/solid, /16/solid
-import Navbar from "@/app/components/nav/Navbar";
-import BookCard from "@/app/components/ui/BookCard";
-import { Book } from "@/app/types/book";
+} from "@heroicons/react/24/solid";
+import { Book } from "@/types/book";
+import Navbar from "@/components/nav/Navbar";
+import BookCard from "@/components/books/BookCard";
 
 const allBooks: Book[] = [
   {
@@ -94,7 +94,6 @@ const allBooks: Book[] = [
 const Home: React.FC = () => {
   return (
     <div>
-      <Navbar />
       {/* Summary Section */}
       <div className="mt-10 space-y-4">
         {/* First row */}
