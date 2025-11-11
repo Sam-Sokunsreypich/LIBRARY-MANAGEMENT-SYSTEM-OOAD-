@@ -1,8 +1,9 @@
 // components/CurrentBorrowing.js
 
 import FilterDropdown from './FilterDropdown';
-import BorrowingTable from './BorrowingTable';
+import BorrowingRecord from './BorrowingRecord';
 import { currentRecords } from '../data/Bookdata';
+import { RowPinning } from '@tanstack/react-table';
 
 export default function CurrentBorrowing({ activeStatus, setActiveStatus }) {
   const filterOptions = [

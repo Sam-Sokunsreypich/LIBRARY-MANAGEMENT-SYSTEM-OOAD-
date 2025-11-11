@@ -105,11 +105,11 @@ export const columns: ColumnDef<BookRequestType>[] = [
     );
   }
   },
-  // {
-  //   accessorKey: "took_book",
-  //   header: "Took book?",
-  //   cell: ({ row }) => (row.original.took_book ? "Yes" : ""),
-  // },
+//   {
+//     accessorKey: "took_book",
+//     header: "Took book?",
+//     cell: ({ row }) => (row.original.took_book ? "Yes" : ""),
+//   },
    {
     accessorKey: "book_issue",
     header: "Has issue?",
