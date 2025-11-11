@@ -26,7 +26,7 @@ export default function Navbar() {
           {/* Desktop Navigation Links */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <Link href="/" className="text-gray-900 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              <Link href="/" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center ">
                 <Home className="w-4 h-4 mr-1" />
                 Home page
               </Link>
@@ -38,7 +38,7 @@ export default function Navbar() {
                 <BookOpen className="w-4 h-4 mr-1" />
                 Borrowing Center
               </Link>
-              <Link href="/favorites" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              <Link href="/favorites" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
                 <Heart className="w-4 h-4 mr-1" />
                 Favorites
               </Link>
@@ -48,9 +48,9 @@ export default function Navbar() {
           {/* Right side items */}
           <div className="flex items-center space-x-4">
             {/* Search Button */}
-            <button className="p-2 rounded-full text-gray-600 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none">
+            {/* <button className="p-2 rounded-full text-gray-600 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none">
               <Search className="h-5 w-5" />
-            </button>
+            </button> */}
 
             {/* User Avatar */}
             <div className="relative">

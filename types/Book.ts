@@ -1,8 +1,11 @@
 export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  coverImage: string; // e.g., "/book-covers/the-kite-runner.jpg"
-  copiesAvailable: number;
-  createdAt: string;
+  book_id: string;
+  book_title: string;
+  author_id: string;
+  book_image: string;
+  book_total: number;
+  book_description?: string;
+  publication_year?: number;
+  subCategory_id?: string; 
+  createdAt?: string;
 }

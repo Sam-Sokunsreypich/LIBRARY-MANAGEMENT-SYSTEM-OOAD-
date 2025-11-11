@@ -43,7 +43,7 @@ export default function UploadImageButton({imageUrls, setImageUrls}: UploadImage
                     src={url}
                     className="border border-gray-500"
                     width={150}
-                    height={250}
+                    height={0}
                     alt={`img-${index}`}
                     />
                 ))}
