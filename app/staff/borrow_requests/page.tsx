@@ -1,84 +1,102 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdmin } from "@/lib/supabase";
+import { BookRequestType } from "@/types/BookRequestType";
+import { getMonitoring } from "@/app/admin/system_monitoring/action/monitoring";
 
 // ✅ Supabase client setup
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// const supabase = await createSupabaseAdmin()
 
-interface BorrowRequest {
-  id: number;
-  user: string;
-  book: string;
-  date: string;
-  status: string;
-}
+// interface BorrowRequest {
+//   id: number;
+//   user: string;
+//   book: string;
+//   date: string;
+//   status: string;
+// }
 
 export default function BorrowRequestsPage() {
-  const [requests, setRequests] = useState<BorrowRequest[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [requests, setRequests] = useState<BookRequestType[]>([]);
+  // const [loading, setLoading] = useState(true);
 
-  // 🔄 Fetch data from Supabase when page loads
-  useEffect(() => {
-    fetchBorrowRequests();
+  // // 🔄 Fetch data from Supabase when page loads
+  // useEffect(() => {
+  //   fetchBorrowRequests();
+  // }, []);
+
+  // const fetchBorrowRequests = async () => {
+  //   setLoading(true);
+
+  //   const { data, error } = await supabase
+  //     .from("book_request")
+  //     .select(`
+  //       id,
+  //       created_at,
+  //       member:member_id(name),
+  //       book:book_id(book_title),
+  //       request_status:request_status_id(status_name)
+  //     `)
+  //     .order("created_at", { ascending: false });
+
+  //   if (error) {
+  //     console.error("❌ Error fetching borrow requests:", error);
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   // 🧠 Transform raw data into frontend-friendly format
+  //   const transformed = data.map((r: any) => ({
+  //     id: r.id,
+  //     user: r.member?.name || "Unknown",
+  //     book: r.book?.book_title || "Untitled",
+  //     date: new Date(r.created_at).toLocaleDateString("en-US", {
+  //       month: "short",
+  //       day: "numeric",
+  //     }),
+  //     status: r.request_status?.status_name || "Pending",
+  //   }));
+
+  //   setRequests(transformed);
+  //   setLoading(false);
+  // };
+
+  const [requests, setRequest] = useState<BookRequestType[]>([]);
+  const [loading, setLoading] = useState(true)
+  
+  useEffect( ()=>{
+    async function fetchRequests() {
+      try {
+        const res = await getMonitoring();
+        
+        setRequest(res.filter((r)=>r.request_status.status_name === "PENDING"));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchRequests();
   }, []);
 
-  const fetchBorrowRequests = async () => {
-    setLoading(true);
-
-    const { data, error } = await supabase
-      .from("book_request")
-      .select(`
-        id,
-        created_at,
-        member:member_id(name),
-        book:book_id(book_title),
-        request_status:request_status_id(status_name)
-      `)
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("❌ Error fetching borrow requests:", error);
-      setLoading(false);
-      return;
-    }
-
-    // 🧠 Transform raw data into frontend-friendly format
-    const transformed = data.map((r: any) => ({
-      id: r.id,
-      user: r.member?.name || "Unknown",
-      book: r.book?.book_title || "Untitled",
-      date: new Date(r.created_at).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-      status: r.request_status?.status_name || "Pending",
-    }));
-
-    setRequests(transformed);
-    setLoading(false);
-  };
-
   // ✅ Handle Approve/Reject Actions
-  const handleApprove = async (id: number) => {
-    const { error } = await supabase
-      .from("book_request")
-      .update({ request_status_id: 2 }) // assuming 2 = approved
-      .eq("id", id);
-    if (error) console.error("Error approving request:", error);
-    else fetchBorrowRequests(); // refresh data
-  };
+  // const handleApprove = async (id: number) => {
+  //   const { error } = await supabase
+  //     .from("book_request")
+  //     .update({ request_status_id: 2 }) // assuming 2 = approved
+  //     .eq("id", id);
+  //   if (error) console.error("Error approving request:", error);
+  //   else fetchBorrowRequests(); // refresh data
+  // };
 
-  const handleReject = async (id: number) => {
-    const { error } = await supabase
-      .from("book_request")
-      .update({ request_status_id: 3 }) // assuming 3 = rejected
-      .eq("id", id);
-    if (error) console.error("Error rejecting request:", error);
-    else fetchBorrowRequests();
-  };
+  // const handleReject = async (id: number) => {
+  //   const { error } = await supabase
+  //     .from("book_request")
+  //     .update({ request_status_id: 3 }) // assuming 3 = rejected
+  //     .eq("id", id);
+  //   if (error) console.error("Error rejecting request:", error);
+  //   else fetchBorrowRequests();
+  // };
 
   if (loading) return <p className="text-gray-500">Loading borrow requests...</p>;
 
