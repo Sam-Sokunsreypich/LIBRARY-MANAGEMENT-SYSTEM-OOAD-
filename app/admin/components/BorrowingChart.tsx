@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/index";
 
 interface BorrowData {
   month: string;
