@@ -20,7 +20,7 @@ export async function getMonitoring(): Promise<BookRequestType[]> {
         name
       ),
       books:book_id (
-        id,
+        book_id,
         book_title,
         book_image
       ),
