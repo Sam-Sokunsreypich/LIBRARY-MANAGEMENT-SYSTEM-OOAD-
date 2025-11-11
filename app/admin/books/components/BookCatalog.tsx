@@ -6,24 +6,28 @@ import { filterBooks } from "../actions/bookfilter";
 import BookFilter from "./BookFilter";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Image from "next/image";
+import EditButton from "./EditButton";
+import DeleteButton from "./DeleteButton";
 
 
 const BookCard = ({ book }: { book: Books }) => (
-    <div className="w-50 h-90 p-4 border border-gray-500 rounded-md bg-white hover:shadow-lg transition-shadow">
+    <div className="w-50 p-2 border border-gray-500 rounded-md bg-white hover:shadow-lg transition-shadow">
+        <div className="h-60">
         <Image 
         src={book.book_image}
         alt={book.book_title || "Book image"}
-        className=""
-        width={165}
+        className="p-1 ml-1"
+        width={170}
         height={0}
         />
-        <h3 className="font-bold text-lg text-indigo-700">{book.book_title}</h3>
-        <p className="text-sm text-gray-500">Book ID: {book.book_id}</p>
-        {book.author && (
-            <p className="text-sm mt-2 font-medium text-gray-800">
-                Author: {book.author.author_first_name} {book.author.author_last_name}
-            </p>
-        )}
+        </div>
+        <h3 className="mt-2 font-bold text-sm text-indigo-700">{book.book_title}</h3>
+        <p className="text-sm">Book ID: {book.book_id}</p>
+        <p className="text-sm">Location: {book.book_location}</p>
+        <div className="flex gap-2 justify-end items-center mt-2">
+            <EditButton book={book}/>
+            <DeleteButton book={book}/>
+        </div>
     </div>
 );
 
@@ -38,6 +42,8 @@ export default function BookCatalog() {
     const [filteredBooks, setFilteredBooks] = useState<Books[] | null>(null);
     // Manages the pending state for the Server Action call
     const [isPending, startTransition] = useTransition();
+
+    
 
     const handleFilter = (data: FilterData) => {
         // Start the transition to update the state after the async server action completes

@@ -22,7 +22,8 @@ export default function CreateBook(){
         >
             + Add Book
         </Button>}
-        form={<BookForm/>}/>
+        form={<BookForm/>}
+        />
 
     )
 }

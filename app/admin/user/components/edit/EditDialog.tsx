@@ -15,7 +15,7 @@ export default function EditDialogForm({ member }: { member: Member }) {
                     bg-blue-100
                     text-blue-700 
                     border-2 border-blue-500 
-                    rounded-xl transition-none 
+                    rounded-2xl transition-none 
                     hover:bg-blue-50
                 ">
                     Edit

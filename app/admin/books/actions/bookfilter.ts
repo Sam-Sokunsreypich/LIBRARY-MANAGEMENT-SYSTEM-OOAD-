@@ -1,5 +1,3 @@
-// File: app/actions/bookfilter.ts (or wherever filterBooks is)
-
 "use server";
 import { createSupabaseAdmin } from "@/lib/supabase";
 
