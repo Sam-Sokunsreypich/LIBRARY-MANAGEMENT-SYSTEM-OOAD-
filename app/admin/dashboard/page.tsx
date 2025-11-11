@@ -4,8 +4,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import StatCard from "@/components/StatCard";
-// import BorrowingChart from "@/components/BorrowingChart";
-// import TopBooksChart from "@/components/TopBooksChart";
+import BorrowingChart from "@/components/BorrowingChart";
+import TopBooksChart from "@/components/TopBooksChart";
 import RecentActivityTable from "@/components/RecentActivityTable";
 
 export default function AdminDashboard() {
