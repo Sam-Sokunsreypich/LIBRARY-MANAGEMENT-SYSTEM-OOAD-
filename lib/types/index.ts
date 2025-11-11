@@ -1,13 +1,13 @@
-export type IPermission = {
-    id: string;
+export type Member = {
+    memberId: string;
+    name: string;
+    email: string;
     created_at: string;
+}
+
+export type Permission = {
+    permissionId: string;
     role: "user" | "staff" | "admin";
     status: "active" | "resigned";
-    member_id: string;
-    member: {
-        id: string;
-        created_at: string;
-        name: string;
-        email: string;
-    }
+    member: Member;
 }

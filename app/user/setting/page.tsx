@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react"; // ✅ you were missing this import
+import { useState } from "react";
 import styles from "./profile.module.css";
 import Bar from "./bar";
+import SignOut from "@/app/admin/components/SignOut";
 
 export default function ProfilePage() {
   const [profileImage, setProfileImage] = useState("/profile.png"); // default image
@@ -23,7 +24,6 @@ export default function ProfilePage() {
 
         <div className={styles.contentBox}>
           
-          {/* ✅ Top section wrapper (this was missing) */}
           <div className={styles.topSection}>
             {/* Avatar upload */}
             <label className={styles.avatarWrapper}>
@@ -55,6 +55,8 @@ export default function ProfilePage() {
             <span>Reading Preferences</span>
             <button className={styles.resetBtn}>Reset</button>
           </div>
+
+          <SignOut/>
         </div>
       </div>
     </>

@@ -118,7 +118,7 @@ export const columns: ColumnDef<BookRequestType>[] = [
   {
     accessorKey: "fine",
     header: "Fine",
-    cell: ({row}) => (row.original.fine === 0 || "null" ? "" :`$${row.original.fine}`)
+    cell: ({row}) => (row.original.rules.fine === 0 || "null" ? "" :`$${row.original.rules.fine}`)
   },
   {
     accessorKey: "created_at",

@@ -1,105 +1,160 @@
 // app/search/page.tsx
 "use client";
 
+import BookCard from "@/components/books/BookCard";
+import SearchBar from "@/components/ui/SearchBar";
 import { useState, useMemo } from "react";
-import BookCard from "../../../components/books/BookCard";
-import { Book } from "../../../types/book";
-import { Search } from 'lucide-react';
 
-// Updated book data to match the picture
+// The new, updated Book interface (for reference)
+interface Book {
+  book_id: string;
+  book_title: string;
+  author_id: string;
+  book_image: string;
+  book_total: number;
+  publication_year: number;
+  subCategory_id: string;
+  book_description?: string;
+  publisher?: string;
+  pages?: number;
+}
+
+// Mock data for authors to simulate a database join
+const authors = {
+  "author_1": "Henry David Thoreau",
+  "author_2": "H. G. Wells",
+  "author_3": "W. Somerset Maugham",
+  "author_4": "Gabriel José García Márquez",
+  "author_5": "Jane Austen",
+  "author_6": "Khaled Hosseini",
+};
+
+// Updated mock book data to match the new Book interface
 const allBooks: Book[] = [
   {
-    id: "1",
-    title: "LIFE IN THE WOODS",
-    author: "Henry David Thoreau",
-    coverImage: "/book-covers/life-in-the-woods.jpg",
-    copiesAvailable: 2,
-    createdAt: "2024-11-07",
+    book_id: "1",
+    book_title: "LIFE IN THE WOODS",
+    author_id: "author_1",
+    book_image: "/book-covers/life-in-the-woods.jpg",
+    book_total: 2,
+    publication_year: 1854,
+    subCategory_id: "sub_1",
+    book_description: "Walden is a book by transcendentalist Henry David Thoreau. The text is a reflection upon simple living in natural surroundings.",
+    publisher: "Ticknor and Fields",
+    pages: 427,
   },
   {
-    id: "2",
-    title: "The Time Machine",
-    author: "H. G. Wells",
-    coverImage: "/book-covers/the-time-machine.jpg",
-    copiesAvailable: 5,
-    createdAt: "2024-11-07",
+    book_id: "2",
+    book_title: "The Time Machine",
+    author_id: "author_2",
+    book_image: "/book-covers/the-time-machine.jpg",
+    book_total: 5,
+    publication_year: 1895,
+    subCategory_id: "sub_1",
+    book_description: "The Time Machine is a science fiction novella by H. G. Wells, published in 1895 and written as a frame narrative.",
+    publisher: "William Heinemann",
+    pages: 118,
   },
   {
-    id: "3",
-    title: "THE MOON AND SIXPENCE",
-    author: "W. Somerset Maugham",
-    coverImage: "/book-covers/moon-and-sixpence.jpg",
-    copiesAvailable: 1,
-    createdAt: "2024-11-07",
+    book_id: "3",
+    book_title: "THE MOON AND SIXPENCE",
+    author_id: "author_3",
+    book_image: "/book-covers/moon-and-sixpence.jpg",
+    book_total: 1,
+    publication_year: 1919,
+    subCategory_id: "sub_2",
+    book_description: "The Moon and Sixpence is a novel by W. Somerset Maugham, told in episodic form by a first-person narrator.",
+    publisher: "Heinemann",
+    pages: 264,
   },
   {
-    id: "5",
-    title: "ONE HUNDRED YEARS OF SOLITUDE",
-    author: "Gabriel García Márquez",
-    coverImage: "/book-covers/hundred-years-solitude.jpg",
-    copiesAvailable: 3,
-    createdAt: "2024-11-07",
+    book_id: "5",
+    book_title: "ONE HUNDRED YEARS OF SOLITUDE",
+    author_id: "author_4",
+    book_image: "/book-covers/hundred-years-solitude.jpg",
+    book_total: 3,
+    publication_year: 1967,
+    subCategory_id: "sub_2",
+    book_description: "One Hundred Years of Solitude tells the multi-generational story of the Buendía family, whose patriarch, José Arcadio Buendía, founded the town of Macondo. The novel explores themes of solitude, time, and the cyclical nature of history through magical realism.",
+    publisher: "Sudamericana",
+    pages: 422,
   },
   {
-    id: "6",
-    title: "PRIDE AND PREJUDICE",
-    author: "Jane Austen",
-    coverImage: "/book-covers/pride-prejudice.jpg",
-    copiesAvailable: 4,
-    createdAt: "2024-11-07",
+    book_id: "6",
+    book_title: "PRIDE AND PREJUDICE",
+    author_id: "author_5",
+    book_image: "/book-covers/pride-prejudice.jpg",
+    book_total: 4,
+    publication_year: 1813,
+    subCategory_id: "sub_3",
+    book_description: "Pride and Prejudice is an 1813 romantic novel of manners written by Jane Austen. The novel charts the emotional development of the protagonist Elizabeth Bennet.",
+    publisher: "T. Egerton",
+    pages: 432,
   },
   {
-    id: "7",
-    title: "KITE RUNNER", // Duplicate as seen in the image
-    author: "Khaled Hosseini",
-    coverImage: "/book-covers/kite-runner-alt.jpg",
-    copiesAvailable: 1,
-    createdAt: "2024-11-07",
+    book_id: "7",
+    book_title: "KITE RUNNER",
+    author_id: "author_6",
+    book_image: "/book-covers/kite-runner-alt.jpg",
+    book_total: 1,
+    publication_year: 2003,
+    subCategory_id: "sub_1",
+    book_description: "The Kite Runner is the first novel by Afghan-American author Khaled Hosseini. Published in 2003, it tells the story of Amir, a young boy from Kabul.",
+    publisher: "Riverhead Books",
+    pages: 371,
   },
 ];
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filter books based on search term
-  const filteredBooks = useMemo(() => {
+  // Filter books and then enrich the data with author names for the BookCard
+  const booksToDisplay = useMemo(() => {
     if (!searchTerm) return allBooks;
+
     return allBooks.filter(
       (book) =>
-        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(searchTerm.toLowerCase())
+        book.book_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        authors[book.author_id as keyof typeof authors].toLowerCase().includes(searchTerm.toLowerCase()) // Search by author name too
     );
   }, [searchTerm]);
 
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-6">
-        {/* Search Bar */}
-        <div className="max-w-2xs mx-auto mb-6">   
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search for books..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+        {/* Search Bar Section */}
+        <div className="flex justify-end mb-6">
+          <SearchBar
+            placeholder="Search for books or authors..."
+            value={searchTerm}
+            onChange={setSearchTerm}
+          />
         </div>
-        
+
         {/* Results Title */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Result</h1>
-          <p className="text-gray-600">Found {filteredBooks.length} books</p>
+          <p className="text-gray-600">Found {booksToDisplay.length} books</p>
         </div>
 
-        {/* Books Grid - matching the screenshot layout */}
+        {/* Books Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {filteredBooks.map((book) => (
-            <BookCard key={book.id} book={book} />
+          {booksToDisplay.map((book) => (
+            <BookCard
+              key={book.book_id}
+              book={{
+                // Transform the data to match BookCard's expected props
+                book_id: book.book_id,
+                book_title: book.book_title,
+                author_id: authors[book.author_id as keyof typeof authors], // Fetch author name
+                book_image: book.book_image,
+                book_total: book.book_total,
+                publication_year: book.publication_year,
+                book_description: book.book_description,
+                // publisher: book.publisher,
+                // pages: book.pages,
+              }}
+            />
           ))}
         </div>
       </div>

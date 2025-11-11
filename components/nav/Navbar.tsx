@@ -17,7 +17,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="">
             <Link href="/" className="text-xl font-bold text-indigo-600">
               LibraryMS
             </Link>
@@ -26,7 +26,7 @@ export default function Navbar() {
           {/* Desktop Navigation Links */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <Link href="/" className="text-gray-900 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              <Link href="/" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center ">
                 <Home className="w-4 h-4 mr-1" />
                 Home page
               </Link>
@@ -38,31 +38,31 @@ export default function Navbar() {
                 <BookOpen className="w-4 h-4 mr-1" />
                 Borrowing Center
               </Link>
-              <Link href="/favorites" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              {/* <Link href="/favorites" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
                 <Heart className="w-4 h-4 mr-1" />
                 Favorites
-              </Link>
+              </Link> */}
             </div>
           </div>
 
           {/* Right side items */}
           <div className="flex items-center space-x-4">
             {/* Search Button */}
-            <button className="p-2 rounded-full text-gray-600 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none">
+            {/* <button className="p-2 rounded-full text-gray-600 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none">
               <Search className="h-5 w-5" />
-            </button>
+            </button> */}
 
             {/* User Avatar */}
             <div className="relative">
               <Link href="/user/setting">
               <button className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <Image
+                {/* <Image
                   className="h-8 w-8 rounded-full"
-                  src="https://picsum.photos/seed/user-avatar/200/200.jpg"
+                  src=""
                   alt="User Avatar"
                   width={32}
                   height={32}
-                />
+                /> */}
                 <ChevronDown className="ml-1 h-4 w-4 text-gray-500" />
               </button>
               </Link>
@@ -94,9 +94,9 @@ export default function Navbar() {
             <Link href="/borrowing" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
               Borrowing Center
             </Link>
-            <Link href="/favorites" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
+            {/* <Link href="/favorites" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
               Favorites
-            </Link>
+            </Link> */}
           </div>
         </div>
       )}
