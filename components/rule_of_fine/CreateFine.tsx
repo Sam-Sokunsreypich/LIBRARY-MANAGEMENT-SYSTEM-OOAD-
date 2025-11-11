@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
+import { toast } from 'sonner'
+import { createRule } from '@/app/admin/rule_of_fine/action/rule'
 
 
 interface CreateFineProps{
@@ -45,24 +47,22 @@ export default function CreateFine({open,onOpenChange, onSubmitData}:CreateFineP
   })
 
  async function onSubmit(values: z.infer<typeof formSchema>) {
-  //     const {data, error} = await supabase
-  //     .from('rules')
-  //     .insert([{
-  //       title: values.title,
-  //       description: values.description,
-  //       fine: values.fine 
-  //     }])
-  //     .select()
 
-  //     if (error) {
-  //   console.error('Error creating rule:', error.message)
-  //   alert('Failed to create rule')
-  //   return
-  // }
-
-      form.reset()
+  try{
+    await createRule({
+      title: values.title,
+      description: values.description,
+      fine: values.fine
+    })
+    toast.success("Rule created successfully!")
+    form.reset()
       setIsModalOpen(false)
-      // onSubmitData?.(data[0])
+
+  }catch(error){
+    toast.error("Fail to create Rule")
+  }
+
+      
     }
   
     return (

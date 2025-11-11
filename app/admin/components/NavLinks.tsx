@@ -19,9 +19,21 @@ export default function NavLinks(){
             href: "/admin/books",
             text: "Books",
         },
+        // {
+        //     href: "/admin/fine",
+        //     text: "Fine & Payment",
+        // }
         {
-            href: "/admin/fine",
-            text: "Fine & Payment",
+            href: "/admin/book_requests",
+            text: "Borrowing Request",
+        },
+        {
+            href: "/admin/system_monitoring",
+            text: "System Monitoring",
+        },
+        {
+            href: "/admin/rule_of_fine",
+            text: "Rule Management",
         }
     ];
 

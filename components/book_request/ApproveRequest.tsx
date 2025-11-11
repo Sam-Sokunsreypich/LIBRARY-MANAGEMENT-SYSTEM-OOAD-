@@ -10,30 +10,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
 import { Trash } from "lucide-react"
+import { Button } from "../ui/button"
 interface props{
-    onDelete?: () => void 
+    onApprove?: () => void 
 }
-export function DeleteFine({onDelete}:props) {
+export function ApproveRequest({onApprove}:props) {
 
     
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Trash className='text-red-500 w-4 h-4'/>
+      <Button
+                className='bg-green-600 hover:bg-green-700'
+                size="sm">Approve</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Are you absolutely sure to Approve Request?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            Fine rule.
+            This action will be approve user to borrow book and wait for user to take at Library.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onDelete} className="bg-red-700">Delete</AlertDialogAction>
+          <AlertDialogAction onClick={onApprove} className="bg-green-600 hover:bg-green-700">Approve</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
