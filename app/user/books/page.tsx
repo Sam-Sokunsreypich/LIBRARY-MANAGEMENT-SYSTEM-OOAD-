@@ -52,8 +52,6 @@ const allBooks: Book[] = [
     publication_year: 1895,
     subCategory_id: "sub_1",
     book_description: "The Time Machine is a science fiction novella by H. G. Wells, published in 1895 and written as a frame narrative.",
-    publisher: "William Heinemann",
-    pages: 118,
   },
   {
     book_id: "3",

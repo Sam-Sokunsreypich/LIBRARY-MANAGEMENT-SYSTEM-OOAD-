@@ -56,13 +56,13 @@ export default function Navbar() {
             <div className="relative">
               <Link href="/user/setting">
               <button className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <Image
+                {/* <Image
                   className="h-8 w-8 rounded-full"
                   src=""
                   alt="User Avatar"
                   width={32}
                   height={32}
-                />
+                /> */}
                 <ChevronDown className="ml-1 h-4 w-4 text-gray-500" />
               </button>
               </Link>
@@ -94,9 +94,9 @@ export default function Navbar() {
             <Link href="/borrowing" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
               Borrowing Center
             </Link>
-            <Link href="/favorites" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
+            {/* <Link href="/favorites" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
               Favorites
-            </Link>
+            </Link> */}
           </div>
         </div>
       )}
