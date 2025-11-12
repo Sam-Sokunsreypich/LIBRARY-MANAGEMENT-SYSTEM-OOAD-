@@ -41,9 +41,9 @@ const DetailPage: React.FC = () => {
           <Image
             src={book?.book_image || "/placeholder-book.png"}
             alt={`${book?.book_title} cover`}
-            // width={150}
-            // height={200}
-            fill
+            width={150}
+            height={200}
+            // fill
             className="object-cover"
           
           />

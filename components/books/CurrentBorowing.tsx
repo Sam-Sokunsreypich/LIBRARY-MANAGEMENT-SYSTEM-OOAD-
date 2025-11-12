@@ -4,38 +4,39 @@ import FilterDropdown from './FilterDropdown';
 import BorrowingTable from './BorrowingTable';
 
 import { StatusType } from '@/types/common';
-import { currentRecords } from '@/app/user/borrowing_center/page';
+import { BookRequestType } from '@/types/BookRequestType';
 
 
 interface CurrentBorrowingProps {
   activeStatus: StatusType;
   setActiveStatus: (status: StatusType) => void;
+  records: BookRequestType[]
 }
 
-const CurrentBorrowing: React.FC<CurrentBorrowingProps> = ({ activeStatus, setActiveStatus }) => {
-  const filterOptions = [
-    { value: 'all' as StatusType, label: 'All Status' },
-    { value: 'borrowing' as StatusType, label: 'Borrowing' },
-    { value: 'non-return' as StatusType, label: 'Non-Return' },
-    { value: 'booking' as StatusType, label: 'Booking' },
-  ];
+const CurrentBorrowing: React.FC<CurrentBorrowingProps> = ({ activeStatus, setActiveStatus ,records }) => {
+  // const filterOptions = [
+  //   { value: 'all' as StatusType, label: 'All Status' },
+  //   { value: 'borrowing' as StatusType, label: 'Borrowing' },
+  //   { value: 'non-return' as StatusType, label: 'Non-Return' },
+  //   { value: 'booking' as StatusType, label: 'Booking' },
+  // ];
 
   const headers = ['Book Information', 'Borrow Date', 'Due Date', 'State', 'Operate'];
 
-  const filteredRecords = currentRecords.filter(record => 
-    activeStatus === 'all' || record.status.toLowerCase().replace('-', '') === activeStatus
-  );
+  // const filteredRecords = currentRecords.filter(record => 
+  //   activeStatus === 'all' || record.status.toLowerCase().replace('-', '') === activeStatus
+  // );
 
   return (
     <div>
-      <FilterDropdown 
+      {/* <FilterDropdown 
         activeStatus={activeStatus}
         setActiveStatus={setActiveStatus}
         options={filterOptions}
         label="Filter Criteria:"
-      />
+      /> */}
       <BorrowingTable 
-        records={filteredRecords}
+        records={records}
         headers={headers}
         type="current"
       />

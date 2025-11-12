@@ -1,90 +1,58 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import BorrowingHistory from '@/components/books/BorrowingHistory';
-import { TabType, StatusType } from '@/types/common';
 import CurrentBorrowing from '@/components/books/CurrentBorowing';
-
-export interface BookRecord {
-  id: number;
-  bookTitle: string;
-  bookAuthor: string;
-  bookCover: string;
-  borrowDate: string;
-  dueDate?: string; 
-  returnDate?: string; 
-  status: 'Borrowing' | 'Non-Return' | 'booking' | 'Returned';
-  daysLeft?: number; 
-}
-
-export const currentRecords: BookRecord[] = [
-  {
-    id: 1,
-    bookTitle: "The Great Gatsby",
-    bookAuthor: "F. Scott Fitzgerald",
-    bookCover: "https://picsum.photos/seed/book1/100/150.jpg",
-    borrowDate: "2025/10/31",
-    dueDate: "2025/11/12",
-    status: "Borrowing",
-    daysLeft: 5
-  },
-  {
-    id: 2,
-    bookTitle: "To Kill a Mockingbird",
-    bookAuthor: "Harper Lee",
-    bookCover: "https://picsum.photos/seed/book2/100/150.jpg",
-    borrowDate: "2025/10/15",
-    dueDate: "2025/10/30",
-    status: "Non-Return",
-    daysLeft: -5
-  },
-  {
-    id: 3,
-    bookTitle: "1984",
-    bookAuthor: "George Orwell",
-    bookCover: "https://picsum.photos/seed/book3/100/150.jpg",
-    borrowDate: "2025/11/05",
-    dueDate: "2025/11/20",
-    status: "booking",
-    daysLeft: 10
-  }
-];
-
-export const historyRecords: BookRecord[] = [
-  {
-    id: 4,
-    bookTitle: "Pride and Prejudice",
-    bookAuthor: "Jane Austen",
-    bookCover: "https://picsum.photos/seed/book4/100/150.jpg",
-    borrowDate: "2025/09/01",
-    returnDate: "2025/09/15",
-    status: "Returned"
-  },
-  {
-    id: 5,
-    bookTitle: "The Catcher in the Rye",
-    bookAuthor: "J.D. Salinger",
-    bookCover: "https://picsum.photos/seed/book5/100/150.jpg",
-    borrowDate: "2025/08/10",
-    returnDate: "2025/08/25",
-    status: "Returned"
-  },
-  {
-    id: 6,
-    bookTitle: "Animal Farm",
-    bookAuthor: "George Orwell",
-    bookCover: "https://picsum.photos/seed/book6/100/150.jpg",
-    borrowDate: "2025/07/05",
-    returnDate: "2025/07/20",
-    status: "Returned"
-  }
-];
+import { getMemberId } from '../books/action/getMemberId';
+import { getMonitoring } from '@/app/admin/system_monitoring/action/monitoring';
+import { BookRequestType } from '@/types/BookRequestType';
+import { TabType, StatusType } from '@/types/common';
 
 const BorrowingCenter = () => {
+  const [memberId, setMemberId] = useState<string | null>(null);
+  const [allBookBorrow, setAllBookBorrow] = useState<BookRequestType[]>([]);
   const [activeTab, setActiveTab] = useState<TabType>('now');
   const [nowActiveStatus, setNowActiveStatus] = useState<StatusType>('all');
   const [historyActiveStatus, setHistoryActiveStatus] = useState<StatusType>('all');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const id = await getMemberId();
+        setMemberId(id);
+
+        const books = await getMonitoring();
+        setAllBookBorrow(books);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Filter only books belonging to this member
+  const myBookBorrow = useMemo(
+    () => allBookBorrow.filter((b) => b.member.id === memberId),
+    [allBookBorrow, memberId]
+  );
+
+  // Separate current and history records
+  const currentRecords = useMemo(
+    () => myBookBorrow.filter(
+      (b) =>
+        b.request_status.status_name !== 'REJECTED' &&
+        b.request_status.status_name !== 'RETURN'
+    ),
+    [myBookBorrow]
+  );
+
+  const historyRecords = useMemo(
+    () => myBookBorrow.filter(
+      (b) => b.request_status.status_name === 'RETURN'
+    ),
+    [myBookBorrow]
+  );
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -92,7 +60,9 @@ const BorrowingCenter = () => {
         <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
           <header className="px-6 py-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-semibold text-gray-800">Borrowing Center</h1>
+              <h1 className="text-2xl font-semibold text-gray-800">
+                Borrowing Center
+              </h1>
             </div>
           </header>
 
@@ -122,16 +92,18 @@ const BorrowingCenter = () => {
 
           <div className="p-6">
             {activeTab === 'now' && (
-              <CurrentBorrowing 
-                activeStatus={nowActiveStatus}
-                setActiveStatus={setNowActiveStatus}
+              <CurrentBorrowing
+                // activeStatus={nowActiveStatus}
+                // setActiveStatus={setNowActiveStatus}
+                records={currentRecords}
               />
             )}
-            
+
             {activeTab === 'history' && (
-              <BorrowingHistory 
-                activeStatus={historyActiveStatus}
-                setActiveStatus={setHistoryActiveStatus}
+              <BorrowingHistory
+                // activeStatus={historyActiveStatus}
+                // setActiveStatus={setHistoryActiveStatus}
+                records={historyRecords}
               />
             )}
           </div>

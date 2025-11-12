@@ -13,7 +13,7 @@ export interface BookRequestType {
       fine:number;
     };
     member: {
-      id: number;
+      id: string;
       email: string;
       name: string;
     };
