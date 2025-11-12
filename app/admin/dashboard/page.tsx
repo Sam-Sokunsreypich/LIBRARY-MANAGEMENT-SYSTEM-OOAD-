@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/index";
+import { supabase } from "@/lib/supabase";
 import StatCard from "@/components/StatCard";
 import BorrowingChart from "@/components/BorrowingChart";
 import TopBooksChart from "@/components/TopBooksChart";
