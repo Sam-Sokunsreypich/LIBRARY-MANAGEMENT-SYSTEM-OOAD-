@@ -7,7 +7,7 @@ import { requestBorrow } from "@/app/user/books/action/borrowing";
 import { createSupabaseAdmin } from "@/lib/supabase";
 import { toast } from "sonner";
 import { Book } from "@/types/Book";
-import { useRouter } from "next/navigation"; 
+import { usePathname, useRouter } from "next/navigation"; 
 
 interface Prop {
   book:Book;
@@ -17,40 +17,24 @@ export default function BookCard({ book  }: Prop) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [isBorrowing, setIsBorrowing] = useState(false);
 
-  const router = useRouter();
-  const detailPage = (book_id:number)=>{
-    router.push(`books/${book_id}`);
-  } 
+ const router = useRouter();
+  const pathname = usePathname();
+
+  const detailPage = (book_id: number) => {
+    // Check if current page is under /user
+    if (pathname.startsWith("/user")) {
+      router.push(`/user/books/${book_id}`);
+    } else {
+      router.push(`/books/${book_id}`);
+    }
+  }; 
+
 
   // Function to toggle the favorite state
   const handleFavoriteToggle = () => {
     setIsFavorited(!isFavorited);
   };
 
-  // const onBorrowing = async () => {
-  //   const supabase = await createSupabaseAdmin();
-  //   try {
-
-  //     const { data: { session } } = await supabase.auth.getSession();
-
-  //     if (!session) {
-  //       alert("Please login first");
-  //       return;
-  //     }
-  //   setIsBorrowing(true)
-  //     const memberId = session.user.id;
-  //     const status = 1;
-  //     await requestBorrow(
-  //       book_id :book.book_id,
-  //       member_id:memberId,
-  //       request_status_id: status);
-  //     toast.success("Your Borrow Request is sending...")
-  //   } catch (error) {
-  //     toast.error("You can't borrow this book.")
-  //     console.error("Failed to borrow:", error);
-  //   }
-  // };
-  
   const onBorrowing = async (book:Book) => {
   
     try {
@@ -94,10 +78,10 @@ export default function BookCard({ book  }: Prop) {
       </div>
       </button>
 
-      {/* Action Buttons */}
+      Action Buttons
       <div className="flex gap-2 mt-3 justify-center">
         {/* Favorite Button */}
-        <button
+        {/* <button
           onClick={handleFavoriteToggle}
           className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
             isFavorited
@@ -106,14 +90,14 @@ export default function BookCard({ book  }: Prop) {
           }`}
         >
           {isFavorited ? "Favorited ❤️" : "Favorite 🤍"}
-        </button>
+        </button> */}
 
         {/* Borrow Button */}
         <button
       onClick={()=>onBorrowing(book)}
-      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+      className={`px-3 w-20 h-10 py-1 text-xs font-medium rounded-full transition-colors ${
         book.book_total > 0
-          ? "bg-blue-500 text-white hover:bg-blue-600"
+          ? "bg-orange-400 text-white hover:bg-orange-600"
           : "bg-gray-300 text-gray-500 cursor-not-allowed"
       }`}
       disabled={book.book_total <= 0 || isBorrowing}

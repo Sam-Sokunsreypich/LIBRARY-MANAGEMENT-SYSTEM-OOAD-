@@ -2,10 +2,12 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import BorrowingHistory from '@/components/books/BorrowingHistory';
-import CurrentBorrowing from '@/components/books/CurrentBorowing';
-import { getBorrowById } from '../books/action/book';
+// import CurrentBorrowing from '@/components/books/CurrentBorowing';
+import { getMemberId } from '../books/action/getMemberId';
+import { getMonitoring } from '@/app/admin/system_monitoring/action/monitoring';
 import { BookRequestType } from '@/types/BookRequestType';
 import { TabType, StatusType } from '@/types/common';
+import CurrentBorrowing from '@/components/books/CurrentBorow';
 
 const BorrowingCenter = () => {
   const [allBookBorrow, setAllBookBorrow] = useState<BookRequestType[]>([]);
