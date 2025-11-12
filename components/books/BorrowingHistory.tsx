@@ -18,7 +18,7 @@ const BorrowingHistory: React.FC<BorrowingHistoryProps> = ({ activeStatus, setAc
   //   { value: 'returned' as StatusType, label: 'Returned' },
   // ];
 
-  const headers = ['Book Information', 'Borrow Date', 'Return Date', 'State', 'Operate'];
+  const headers = ['Book Information', 'Borrow Date', 'Return Date', 'State'];
 
   // const filteredRecords = historyRecords.filter(record => 
   //   activeStatus === 'all' || record.status.toLowerCase() === activeStatus

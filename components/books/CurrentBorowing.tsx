@@ -8,8 +8,8 @@ import { BookRequestType } from '@/types/BookRequestType';
 
 
 interface CurrentBorrowingProps {
-  activeStatus: StatusType;
-  setActiveStatus: (status: StatusType) => void;
+  activeStatus?: StatusType;
+  setActiveStatus?: (status: StatusType) => void;
   records: BookRequestType[]
 }
 
@@ -21,7 +21,7 @@ const CurrentBorrowing: React.FC<CurrentBorrowingProps> = ({ activeStatus, setAc
   //   { value: 'booking' as StatusType, label: 'Booking' },
   // ];
 
-  const headers = ['Book Information', 'Borrow Date', 'Due Date', 'State', 'Operate'];
+  const headers = ['Book Information', 'Borrow Date', 'Due Date', 'State',];
 
   // const filteredRecords = currentRecords.filter(record => 
   //   activeStatus === 'all' || record.status.toLowerCase().replace('-', '') === activeStatus

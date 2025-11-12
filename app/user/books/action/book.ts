@@ -2,6 +2,9 @@
 
 import { createSupabaseAdmin, createSupabaseServerClient } from "@/lib/supabase";
 import { Book } from "@/types/Book";
+import { getMemberId } from "./getMemberId";
+import { getMonitoring } from "@/app/admin/system_monitoring/action/monitoring";
+import { BookRequestType } from "@/types/BookRequestType";
 
 
 export async function getAllBook(): Promise<Book[]> {
@@ -33,4 +36,24 @@ export async function getAllBook(): Promise<Book[]> {
     throw error;
   }
   return data || [];
+}
+
+
+export async function getBorrowById(): Promise<BookRequestType[]> {
+  try {
+    const memberId = await getMemberId();
+    console.log('Member ID:', memberId);
+
+    const allBooks = await getMonitoring();
+
+    // Filter for this member
+    const myBooks = allBooks.filter(
+      (book: BookRequestType) => book.member.id === memberId
+    );
+
+    return myBooks;
+  } catch (error) {
+    console.error('Error fetching borrow data:', error);
+    throw new Error('Failed to get borrow data');
+  }
 }

@@ -3,13 +3,11 @@
 import { useEffect, useState, useMemo } from 'react';
 import BorrowingHistory from '@/components/books/BorrowingHistory';
 import CurrentBorrowing from '@/components/books/CurrentBorowing';
-import { getMemberId } from '../books/action/getMemberId';
-import { getMonitoring } from '@/app/admin/system_monitoring/action/monitoring';
+import { getBorrowById } from '../books/action/book';
 import { BookRequestType } from '@/types/BookRequestType';
 import { TabType, StatusType } from '@/types/common';
 
 const BorrowingCenter = () => {
-  const [memberId, setMemberId] = useState<string | null>(null);
   const [allBookBorrow, setAllBookBorrow] = useState<BookRequestType[]>([]);
   const [activeTab, setActiveTab] = useState<TabType>('now');
   const [nowActiveStatus, setNowActiveStatus] = useState<StatusType>('all');
@@ -18,10 +16,7 @@ const BorrowingCenter = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const id = await getMemberId();
-        setMemberId(id);
-
-        const books = await getMonitoring();
+        const books = await getBorrowById(); // server function
         setAllBookBorrow(books);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -31,28 +26,30 @@ const BorrowingCenter = () => {
     fetchData();
   }, []);
 
-  // Filter only books belonging to this member
-  const myBookBorrow = useMemo(
-    () => allBookBorrow.filter((b) => b.member.id === memberId),
-    [allBookBorrow, memberId]
-  );
+  // Log all borrow data
+  console.log('allBookBorrow', allBookBorrow);
 
   // Separate current and history records
   const currentRecords = useMemo(
-    () => myBookBorrow.filter(
-      (b) =>
-        b.request_status.status_name !== 'REJECTED' &&
-        b.request_status.status_name !== 'RETURN'
-    ),
-    [myBookBorrow]
+    () =>
+      allBookBorrow.filter(
+        (b) =>
+          b.request_status.status_name !== 'REJECTED' &&
+          b.request_status.status_name !== 'RETURNED'
+      ),
+    [allBookBorrow]
   );
 
   const historyRecords = useMemo(
-    () => myBookBorrow.filter(
-      (b) => b.request_status.status_name === 'RETURN'
-    ),
-    [myBookBorrow]
+    () =>
+      allBookBorrow.filter(
+        (b) => b.request_status.status_name === 'RETURNED'
+      ),
+    [allBookBorrow]
   );
+
+  console.log('currentRecords', currentRecords);
+  console.log('historyRecords', historyRecords);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -66,7 +63,7 @@ const BorrowingCenter = () => {
             </div>
           </header>
 
-          {/* Tab buttons */}
+          {/* Tabs */}
           <div className="flex border-b border-gray-200">
             <button
               className={`px-6 py-3 font-medium ${
@@ -93,16 +90,16 @@ const BorrowingCenter = () => {
           <div className="p-6">
             {activeTab === 'now' && (
               <CurrentBorrowing
-                // activeStatus={nowActiveStatus}
-                // setActiveStatus={setNowActiveStatus}
+                activeStatus={nowActiveStatus}
+                setActiveStatus={setNowActiveStatus}
                 records={currentRecords}
               />
             )}
 
             {activeTab === 'history' && (
               <BorrowingHistory
-                // activeStatus={historyActiveStatus}
-                // setActiveStatus={setHistoryActiveStatus}
+                activeStatus={historyActiveStatus}
+                setActiveStatus={setHistoryActiveStatus}
                 records={historyRecords}
               />
             )}

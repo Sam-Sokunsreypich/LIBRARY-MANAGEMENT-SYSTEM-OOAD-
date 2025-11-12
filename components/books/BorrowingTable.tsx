@@ -1,8 +1,9 @@
-import { BookRecord } from "@/app/user/borrowing_center/page";
+import { BookRequestType } from "@/types/BookRequestType";
+import Image from "next/image";
 
 
 interface BorrowingTableProps {
-  records: BookRecord[];
+  records: BookRequestType[];
   headers: string[];
   type: 'current' | 'history';
 }
@@ -18,18 +19,20 @@ const BorrowingTable: React.FC<BorrowingTableProps> = ({ records, headers, type 
     }
   };
 
-  const getActionText = (record: BookRecord) => {
-    if (type === 'current') {
-      if (record.status === 'Borrowing' && record.daysLeft !== undefined) {
-        return record.daysLeft > 0 ? `Due ${record.daysLeft} days left` : 'Due today';
-      } else if (record.status === 'Non-Return') {
-        return 'Late';
-      } else if (record.status === 'booking') {
-        return 'Non';
-      }
-    }
-    return 'View Details';
-  };
+  console.log('records', records)
+
+  // const getActionText = (record: BookRecord) => {
+  //   if (type === 'current') {
+  //     if (record.status === 'Borrowing' && record.daysLeft !== undefined) {
+  //       return record.daysLeft > 0 ? `Due ${record.daysLeft} days left` : 'Due today';
+  //     } else if (record.status === 'Non-Return') {
+  //       return 'Late';
+  //     } else if (record.status === 'booking') {
+  //       return 'Non';
+  //     }
+  //   }
+  //   return 'View Details';
+  // };
 
   return (
     <div className="overflow-x-auto">
@@ -50,28 +53,31 @@ const BorrowingTable: React.FC<BorrowingTableProps> = ({ records, headers, type 
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
-                      <img className="h-10 w-10 rounded object-cover" src={record.bookCover} alt={record.book_title} />
+                      <Image 
+                      width={50}
+                      height={75}
+                      className=" rounded-lg object-cover" src={record.books.book_image} alt={record.books.book_title} />
                     </div>
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">{record.bookTitle}</div>
-                      <div className="text-sm text-gray-500">{record.bookAuthor}</div>
+                      <div className="text-sm font-medium text-gray-900">{record.books.book_title}</div>
+                      {/* <div className="text-sm text-gray-500">{record.}</div> */}
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.borrowDate}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.start_date}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {type === 'current' ? record.dueDate : record.returnDate}
+                  {type === 'current' ? record.end_date : record.end_date}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(record.status)}`}>
-                    {record.status}
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(record.request_status.status_name)}`}>
+                    {record.request_status.status_name}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button className="text-amber-600 hover:text-amber-900">
                     {getActionText(record)}
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))
           ) : (
