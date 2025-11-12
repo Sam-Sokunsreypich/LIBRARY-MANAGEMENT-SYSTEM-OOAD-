@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { getAllBook } from "../action/book";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { toast } from "sonner";
+import { requestBorrow } from "../action/borrowing";
 
 
 
@@ -12,6 +14,8 @@ const DetailPage: React.FC = () => {
   const { book_id } = useParams();
   const [allBooks, setAllBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [isBorrowing, setIsBorrowing] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -27,7 +31,23 @@ const DetailPage: React.FC = () => {
     fetchBooks();
   }, []);
 
+
+
   const book = allBooks.find((b) => String(b.book_id) === String(book_id));
+  const onBorrowing = async () => {
+  
+    try {
+      
+      const status = 1;
+  
+      await requestBorrow(book!.book_id, status);
+      setIsBorrowing(true)
+      toast.success("Your borrow request has been sent!");
+    } catch (error) {
+      toast.error("You can't borrow this book.");
+      console.error("Failed to borrow:", error);
+    }
+  };
   console.log('book', book)
   return (
     <div className="min-h-screen bg-white flex flex-col items-center px-6 py-10 font-sans">
@@ -37,21 +57,21 @@ const DetailPage: React.FC = () => {
 
         <div className="flex flex-col md:flex-row gap-8 items-start">
           {/* Book Cover */}
-          <div className="shadow-lg rounded-lg overflow-hidden w-[180px] h-[240px] flex items-center justify-center bg-gray-100">
+          <div className="shadow-lg rounded-lg overflow-hidden w-1/3 h-auto flex items-center justify-center bg-gray-100">
           <Image
             src={book?.book_image || "/placeholder-book.png"}
             alt={`${book?.book_title} cover`}
-            width={150}
-            height={200}
+            width={250}
+            height={300}
             // fill
-            className="object-cover"
+            className=""
           
           />
           </div>
 
           {/* Book Info */}
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-extrabold text-gray-900">
+            <h1 className="text-2xl font-extrabold text-gray-900">
               {book?.book_title.toUpperCase()}
             </h1>
             <p className="text-gray-700">
@@ -78,10 +98,25 @@ const DetailPage: React.FC = () => {
 
         {/* Buttons */}
         <div className="flex items-center gap-4 mt-6">
-          <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all">
+          {/* <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow-md transition-all">
             Borrow Now
-          </button>
-          <button className="flex items-center gap-2 border border-gray-300 hover:bg-gray-50 px-5 py-2 rounded-full shadow-sm transition-all">
+          </button> */}
+          <button
+      onClick={()=>onBorrowing()}
+      className={`px-3 w-30 h-10 py-1 text-xs font-medium rounded-full transition-colors ${
+        
+          "bg-orange-400 text-white hover:bg-orange-600"
+         
+      }`}
+      disabled={ isBorrowing}
+    >
+      {isBorrowing
+        ? "Borrowing Request..."
+        : 
+         "Borrow"
+        }
+    </button>
+          {/* <button className="flex items-center gap-2 border border-gray-300 hover:bg-gray-50 px-5 py-2 rounded-full shadow-sm transition-all">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -97,7 +132,7 @@ const DetailPage: React.FC = () => {
               />
             </svg>
             Share
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

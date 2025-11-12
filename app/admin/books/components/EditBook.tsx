@@ -18,7 +18,7 @@ import { useEffect, useState, useTransition } from "react";
 import { fetchCategoriesAndSubcategories } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { convertBlobUrlToFile } from "../actions/image";
-import { uploadImage } from "@/lib/supabase/storage";
+import { deleteImage, uploadImage } from "@/lib/supabase/storage";
 import { updateBookInfo } from "../actions/book";
 import { toast } from "sonner";
 import UploadImageButton from "./UploadButton";
@@ -28,19 +28,20 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Image from "next/image";
 
 const UpdateSchema = z.object({
-  book_id: z.string(),
-  book_image: z.string(),
-  book_title: z.string(),
-  publication_year: z.string(),
-  book_total: z.number().min(1, { message: "Total must be more than 1." }),
-  book_location: z.string(),
-  book_description: z.string(),
-  category_id: z.string(),
-  subcategory_id: z.string(),
+  book_id: z.string().optional(),
+  book_image: z.string().optional(),
+  book_title: z.string().optional(),
+  publication_year: z.string().optional(),
+  book_total: z.number().min(1, { message: "Total must be more than 1." }).optional(),
+  book_location: z.string().optional(),
+  book_description: z.string().optional(),
+  category_id: z.string().optional(),
+  subcategory_id: z.string().optional(),
 });
 
+
 export default function EditBookForm({book}:{book: Books}){
-    const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const[isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof UpdateSchema>>({
@@ -80,36 +81,75 @@ export default function EditBookForm({book}:{book: Books}){
   if (error || !data) return <p>Failed to fetch categories</p>;
 
   // --- Image Upload ---
-  async function uploadAllImages() {
-    const uploadedUrls: string[] = [];
+  async function uploadAllImages(oldImageUrl: string) {
+    if(imageUrls.length === 0)return oldImageUrl;
 
-    for (const url of imageUrls) {
-      const imageFile = await convertBlobUrlToFile(url);
-      const { imageUrl, error } = await uploadImage({ file: imageFile, bucket: "book_image" });
-      if (error) throw new Error("Image Upload failed: " + error.message);
-      uploadedUrls.push(imageUrl);
+    try{
+      if(oldImageUrl){
+        const { success, error } = await deleteImage({
+          imageUrl: oldImageUrl,
+          bucket: "book_image",
+        });
+
+        if(!success) console.warn("Delete warning", error);
+      }
+
+      const uploadedUrls: string[] = [];
+      for(const url of imageUrls){
+        const imageFile = await convertBlobUrlToFile(url);
+        const { imageUrl, error } = await uploadImage({
+          file: imageFile,
+          bucket: "book_image",
+        });
+        if(error) throw new Error("Image Upload failed: " + error);
+        uploadedUrls.push(imageUrl);
+      }
+
+      return uploadedUrls[0];
+    }catch(error: any){
+      console.error("Upload failed: ", error.message);
+      throw error;
     }
-    return uploadedUrls;
   }
 
 
-  function onSubmit(data: z.infer<typeof UpdateSchema>){
-    startTransition(async() => {
-      const result = JSON.parse(await updateBookInfo(book.book_id, data));
+function onSubmit(data: z.infer<typeof UpdateSchema>) {
+  startTransition(async () => {
+    try {
+      let newImageUrl = book.book_image;
+
+      if (imageUrls.length > 0) {
+        newImageUrl = await uploadAllImages(book.book_image);
+      }
+
+      const updatedData = {
+        ...Object.fromEntries(
+          Object.entries(data).filter(([_, value]) => value !== undefined && value !== "")
+        ),
+        ...(newImageUrl && { book_image: newImageUrl }),
+      };
+
+      const result = JSON.parse(await updateBookInfo(book.book_id, updatedData));
+
       if (result?.error) {
-				toast.error("Failed to update", {
-					description: (
-						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-							<code className="text-white">{result.error.message}</code>
-						</pre>
-					),
-				});
-			} else {
-				document.getElementById("trigger")?.click();
-				toast.success("Successfully updated!");
-			}
-    })
-  }
+        toast.error("Failed to update", {
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">{result.error.message}</code>
+            </pre>
+          ),
+        });
+      } else {
+        document.getElementById("trigger")?.click();
+        toast.success("Successfully updated!");
+      }
+    } catch (error: any) {
+      console.error("Update failed:", error);
+      toast.error("Update failed. Check console for details.");
+    }
+  });
+}
+
   const currentSubcategory = data?.subcategories.find((sub) => String(sub.subcategory_id) === String(book.subcategory_id));
   return(
     <Form {...form}>
@@ -138,7 +178,7 @@ export default function EditBookForm({book}:{book: Books}){
             <FormItem>
               <FormLabel>Book ID:</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -230,10 +270,10 @@ export default function EditBookForm({book}:{book: Books}){
                 <FormLabel>Category: </FormLabel>
                 <FormControl>
                   <Select
-                    value={field.value || String(book.category_id)}
+                    value={field.value}
                     onValueChange={(val) => {
                       field.onChange(val);
-                      form.setValue("subcategory_id", ""); // reset subcategory
+                      form.setValue("subcategory_id", "");
                     }}
                   >
                     <SelectTrigger>

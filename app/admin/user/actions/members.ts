@@ -33,7 +33,7 @@ async function fetchData(){
     // 1. Fetch all Members
     const { data: members, error: memberError } = await supabase
     .from("member")
-    .select("id, name, created_at, email");
+    .select("id, name, created_at, email, identity");
 
     if(memberError){
         console.error("Error fetching members: ", memberError.message);

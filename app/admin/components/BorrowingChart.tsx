@@ -1,5 +1,6 @@
 "use client";
 
+import { createSupabaseServerClient } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import {
   LineChart,
@@ -10,7 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { supabase } from "@/lib/supabaseClient";
+// import { supabase } from "@/lib/supabaseClient";
 
 interface BorrowData {
   month: string;
@@ -19,9 +20,11 @@ interface BorrowData {
 
 export default function BorrowingChart() {
   const [data, setData] = useState<BorrowData[]>([]);
+  
 
   useEffect(() => {
     const fetchData = async () => {
+      const supabase = await createSupabaseServerClient()
       const { data: books, error } = await supabase
         .from("issued_books")
         .select("issued_date");

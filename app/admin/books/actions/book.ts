@@ -1,5 +1,5 @@
 "use server";
-import { createSupabaseAdmin } from "@/lib/supabase";
+import { createSupabaseAdmin, createSupabaseServerClient } from "@/lib/supabase";
 import { Books } from "@/lib/types/booktype";
 import { error } from "console";
 import { revalidatePath } from "next/cache";
@@ -84,7 +84,7 @@ export async function fetchBookInfo(){
 //Update Book Info
 export async function updateBookInfo(
   book_id: string,
-  data: {
+  data: Partial<{
     book_id: string;
     book_title: string,
     book_image: string,
@@ -95,7 +95,7 @@ export async function updateBookInfo(
     category_id: string,
     subcategory_id: string,
   }
-){
+>){
   const supabase = await createSupabaseAdmin();
 
 
@@ -153,4 +153,30 @@ export async function deleteBookInfo({book}: {book: Books}){
     console.log("Book deleted successfully");
     revalidatePath("/admin/books")
     return JSON.stringify(deleteBook);
+}
+
+export async function fetchAllBooks(filters?: {
+  categoryId?: string;
+  subcategoryId?: string;
+}): Promise<Books[]> {
+  const supabase = await createSupabaseServerClient();
+
+  let query = supabase.from("books").select("*");
+
+  if (filters?.categoryId) {
+    query = query.eq("category_id", filters.categoryId);
+  }
+
+  if (filters?.subcategoryId) {
+    query = query.eq("subcategory_id", filters.subcategoryId);
+  }
+
+  const { data: books, error } = await query;
+
+  if (error) {
+    console.error("Failed to fetch books", error);
+    return [];
+  }
+
+  return books;
 }

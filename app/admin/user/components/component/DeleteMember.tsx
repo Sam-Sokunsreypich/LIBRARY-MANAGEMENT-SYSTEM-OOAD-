@@ -20,7 +20,7 @@ export default function DeleteMember({ user_id }: {user_id: string}){
     }
     return(
         <form action={onSubmit}>
-            <Button className="bg-red-100 border border-red-500 rounded-lg">
+            <Button className="bg-red-100 border border-red-500 rounded-xl text-red-700">
                 Delete
             </Button>
         </form>

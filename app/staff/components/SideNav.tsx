@@ -7,7 +7,7 @@ export default function SideNav() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/staff/dashboard", label: "Dashboard" },
+    { href: "/staff/", label: "Dashboard" },
     { href: "/staff/borrow_requests", label: "Borrow Requests" },
     { href: "/staff/book_return", label: " Book Return" },
     { href: "/staff/overdue", label: " Overdue" },

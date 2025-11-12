@@ -12,7 +12,7 @@ export async function createSupbaseServerClientReadOnly() {
 		{
 			cookies: {
 				async get(name: string) {
-					return (await cookieStore).get(name)?.value;
+					return cookieStore.get(name)?.value;
 				},
 			},
 		}
@@ -28,13 +28,13 @@ export async function createSupabaseServerClient() {
 		{
 			cookies: {
 				async get(name: string) {
-					return (await cookieStore).get(name)?.value;
+					return cookieStore.get(name)?.value;
 				},
 				async set(name: string, value: string, options: CookieOptions) {
-					(await cookieStore).set({ name, value, ...options });
+					cookieStore.set({ name, value, ...options });
 				},
 				async remove(name: string, options: CookieOptions) {
-					(await cookieStore).set({ name, value: "", ...options });
+					cookieStore.set({ name, value: "", ...options });
 				},
 			},
 		}

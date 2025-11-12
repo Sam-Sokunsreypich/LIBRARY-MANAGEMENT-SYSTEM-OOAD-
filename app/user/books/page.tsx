@@ -5,6 +5,7 @@ import SearchBar from "@/components/ui/SearchBar";
 import { Book } from "@/types/Book";
 import { useState, useMemo, useEffect } from "react";
 import { getAllBook } from "./action/book";
+import BookCatalog from "@/app/admin/books/components/BookCatalog";
 
 export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,6 +48,8 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 px-16 gap-4">
+
+
       <div className="container px-4 py-6">
         {/* Search Bar Section */}
         <div className="flex justify-end mb-6">
@@ -56,6 +59,7 @@ export default function SearchPage() {
             onChange={setSearchTerm}
           />
         </div>
+
 
         {/* Results Title */}
         <div className="mb-6 ">

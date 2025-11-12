@@ -5,6 +5,7 @@ import { Book } from "@/types/Book";
 import { getMemberId } from "./getMemberId";
 import { getMonitoring } from "@/app/admin/system_monitoring/action/monitoring";
 import { BookRequestType } from "@/types/BookRequestType";
+import { getMemberProfile, MemberProfile } from "./member";
 
 
 export async function getAllBook(): Promise<Book[]> {
@@ -49,6 +50,25 @@ export async function getBorrowById(): Promise<BookRequestType[]> {
     // Filter for this member
     const myBooks = allBooks.filter(
       (book: BookRequestType) => book.member.id === memberId
+    );
+
+    return myBooks;
+  } catch (error) {
+    console.error('Error fetching borrow data:', error);
+    throw new Error('Failed to get borrow data');
+  }
+}
+
+export async function getMemberByID(): Promise<MemberProfile> {
+  try {
+    const memberId = await getMemberId();
+    console.log('Member ID:', memberId);
+
+    const member = await getMemberProfile();
+
+    // Filter for this member
+    const myBooks = member.filter(
+      (book: MemberProfile) => book.id === memberId
     );
 
     return myBooks;
