@@ -1,6 +1,7 @@
 // File: app/book/components/BookCatalog.tsx
 "use client";
-import { useState, useTransition } from "react";
+
+import { useState, useTransition, useEffect } from "react";
 import { Books } from "@/lib/types/booktype"; 
 import { filterBooks } from "../actions/bookfilter"; 
 import BookFilter from "./BookFilter";
@@ -9,10 +10,12 @@ import Image from "next/image";
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 
-
-const BookCard = ({ book }: { book: Books }) => (
-    <div className="w-50 p-2 border border-gray-500 rounded-md bg-white hover:shadow-lg transition-shadow">
-        <div className="h-55 overflow-hidden flex items-center justify-center bg-gray-50">
+const BookCard = ({ book, index }: { book: Books; index: number }) => (
+  <div
+    key={book.book_id || index}
+    className="w-50 p-2 border border-gray-500 rounded-md bg-white hover:shadow-lg transition-shadow"
+  >
+    <div className="h-55 overflow-hidden flex items-center justify-center bg-gray-50 group">
       <Image
         src={book.book_image}
         alt={book.book_title || "Book image"}
@@ -20,98 +23,98 @@ const BookCard = ({ book }: { book: Books }) => (
         height={200}
         className="object-contain max-h-full transition-transform duration-200 group-hover:scale-105"
       />
-        </div>
-        <h3 className="w-30 truncate mt-2 font-bold text-sm text-indigo-700">{book.book_title}</h3>
-        <p className="text-sm">Book ID: {book.book_id}</p>
-        <p className="text-sm">Location: {book.book_location}</p>
-        <div className="flex gap-2 justify-end items-center mt-2">
-            <EditButton book={book}/>
-            <DeleteButton book={book}/>
-        </div>
     </div>
+    <h3 className="w-30 truncate mt-2 font-bold text-sm text-indigo-700">
+      {index + 1}. {book.book_title}
+    </h3>
+    <p className="text-sm">Book ID: {book.book_id}</p>
+    <p className="text-sm">Location: {book.book_location}</p>
+    <div className="flex gap-2 justify-end items-center mt-2">
+      <EditButton book={book} />
+      <DeleteButton book={book} />
+    </div>
+  </div>
 );
 
-
 interface FilterData {
-    categoryId?: string;
-    subcategoryId?: string;
+  categoryId?: string;
+  subcategoryId?: string;
 }
 
 export default function BookCatalog() {
-    // Stores the list of books fetched after filtering. Null initially.
-    const [filteredBooks, setFilteredBooks] = useState<Books[] | null>(null);
-    // Manages the pending state for the Server Action call
-    const [isPending, startTransition] = useTransition();
+  const [filteredBooks, setFilteredBooks] = useState<Books[]>([]);
+  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(true);
 
-    
+  // 🟢 Fetch all books initially
+  useEffect(() => {
+    async function fetchAllBooks() {
+      startTransition(async () => {
+        try {
+          const { books, error } = await filterBooks("", "");
+          if (error) {
+            console.error("Failed to load books:", error);
+            setFilteredBooks([]);
+          } else {
+            setFilteredBooks(books || []);
+          }
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+    fetchAllBooks();
+  }, []);
 
-    const handleFilter = (data: FilterData) => {
-        // Start the transition to update the state after the async server action completes
-        startTransition(async () => {
-            const category = data.categoryId || "";
-            const subcategory = data.subcategoryId || "";
-            const { books, error } = await filterBooks(category, subcategory);
-            
-            if (error) {
-                const errorMessage = error.message || "Unknown error during filtering.";
-                console.error("Filter failed:", errorMessage);
-                
-                // You might also want to display this error message to the user:
-                // toast.error(`Error: ${errorMessage}`); 
-                
-                setFilteredBooks([]);
-            } else {
-                // Update the state with the received books (or empty array if null)
-                setFilteredBooks(books || []);
-            }
-        });
-    };
+  const handleFilter = (data: FilterData) => {
+    startTransition(async () => {
+      const category = data.categoryId || "";
+      const subcategory = data.subcategoryId || "";
+      const { books, error } = await filterBooks(category, subcategory);
 
-    return (
-        <div className="w-full">
-            <div className="flex justify-between gap-5 mb-6">
-                {/* Pass the handler function and loading state to BookFilter */}
-                <BookFilter 
-                    onFilterSubmit={handleFilter} 
-                />
-            </div>
+      if (error) {
+        console.error("Filter failed:", error.message);
+        setFilteredBooks([]);
+      } else {
+        setFilteredBooks(books || []);
+      }
+    });
+  };
 
-            {/* Display Results */}
-            <div className="border-t pt-6">
-                {/* Loading Indicator */}
-                {isPending && (
-                    <div className="flex items-center justify-center p-8 text-blue-500">
-                        <AiOutlineLoading3Quarters className="animate-spin text-2xl mr-3" />
-                        <p className="text-lg">Searching for books...</p>
-                    </div>
-                )}
-                
-                {/* Initial State Message */}
-                {filteredBooks === null && !isPending && (
-                    <p className="text-center p-12 text-gray-500 border border-dashed rounded-lg">
-                        Use the filters above and click 'Apply Filter' to see results.
-                    </p>
-                )}
-                
-                {/* Books Found */}
-                {filteredBooks && filteredBooks.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                        {filteredBooks.map((book,index) => (
-                            <BookCard 
-                            key={String(book.book_id || `${book.category_id}=${index}`)}
-                            book={book} />
-                        ))}
-                    </div>
-                )}
-                
-                {/* No Books Found */}
-                {filteredBooks && filteredBooks.length === 0 && !isPending && (
-                    <div className="text-center p-12 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-red-700 font-semibold">No books found.</p>
-                        <p className="text-sm text-red-600">Try adjusting your category or subcategory filters.</p>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className="w-full">
+      <div className="flex justify-between gap-5 mb-6">
+        <BookFilter onFilterSubmit={handleFilter} />
+      </div>
+
+      <div className="border-t pt-6">
+        {/* Loading Indicator */}
+        {(isPending || loading) && (
+          <div className="flex items-center justify-center p-8 text-blue-500">
+            <AiOutlineLoading3Quarters className="animate-spin text-2xl mr-3" />
+            <p className="text-lg">Loading books...</p>
+          </div>
+        )}
+
+        {/* Books Found */}
+        {!loading && filteredBooks.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {filteredBooks.map((book, index) => (
+              <BookCard key={book.book_id || index} book={book} index={index} />
+            ))}
+          </div>
+        )}
+
+        {/* No Books Found */}
+        {!loading && filteredBooks.length === 0 && !isPending && (
+          <div className="text-center p-12 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-700 font-semibold">No books found.</p>
+            <p className="text-sm text-red-600">
+              Try adjusting your category or subcategory filters.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
