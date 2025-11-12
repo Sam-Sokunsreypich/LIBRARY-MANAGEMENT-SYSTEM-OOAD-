@@ -34,7 +34,7 @@ export default function Navbar() {
                 <BookOpen className="w-4 h-4 mr-1" />
                 Books
               </Link>
-              <Link href="/borrowing" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              <Link href="/user/borrowing_center" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
                 <BookOpen className="w-4 h-4 mr-1" />
                 Borrowing Center
               </Link>
@@ -88,10 +88,10 @@ export default function Navbar() {
             <Link href="/" className="text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
               Home page
             </Link>
-            <Link href="/books" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
+            <Link href="user/books" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
               Books
             </Link>
-            <Link href="/borrowing" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
+            <Link href="user/borrowing_center" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">
               Borrowing Center
             </Link>
             {/* <Link href="/favorites" className="text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">

@@ -1,5 +1,6 @@
 import Navbar from "@/components/nav/Navbar";
 import { Metadata } from "next";
+import { Toaster } from "sonner";
 // import Navbar from "../../components/nav/Navbar";
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export default function UserLayout({children}: {children: React.ReactNode}){
         <div className="user-container">
             <Navbar />
             <main>{children}</main>
+            <Toaster position="top-right" richColors /> 
         </div>
     )
 }

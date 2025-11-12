@@ -27,27 +27,47 @@ export default function BookCard({ book  }: Prop) {
     setIsFavorited(!isFavorited);
   };
 
-  const onBorrowing = async () => {
-    const supabase = await createSupabaseAdmin();
+  // const onBorrowing = async () => {
+  //   const supabase = await createSupabaseAdmin();
+  //   try {
+
+  //     const { data: { session } } = await supabase.auth.getSession();
+
+  //     if (!session) {
+  //       alert("Please login first");
+  //       return;
+  //     }
+  //   setIsBorrowing(true)
+  //     const memberId = session.user.id;
+  //     const status = 1;
+  //     await requestBorrow(
+  //       book_id :book.book_id,
+  //       member_id:memberId,
+  //       request_status_id: status);
+  //     toast.success("Your Borrow Request is sending...")
+  //   } catch (error) {
+  //     toast.error("You can't borrow this book.")
+  //     console.error("Failed to borrow:", error);
+  //   }
+  // };
+  
+  const onBorrowing = async (book:Book) => {
+  
     try {
-
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (!session) {
-        alert("Please login first");
-        return;
-      }
-    setIsBorrowing(true)
-      const memberId = session.user.id;
+      
+  
+      
       const status = 1;
-      await requestBorrow(book.book_id,memberId,status);
-      toast.success("Your Borrow Request is sending...")
+  
+      await requestBorrow(book.book_id, status);
+      setIsBorrowing(true)
+      toast.success("Your borrow request has been sent!");
     } catch (error) {
-      toast.error("You can't borrow this book.")
+      toast.error("You can't borrow this book.");
       console.error("Failed to borrow:", error);
     }
   };
-  
+
 
   return (
     <div className="group flex flex-col w-full max-w-160">
@@ -90,7 +110,7 @@ export default function BookCard({ book  }: Prop) {
 
         {/* Borrow Button */}
         <button
-      onClick={onBorrowing}
+      onClick={()=>onBorrowing(book)}
       className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
         book.book_total > 0
           ? "bg-blue-500 text-white hover:bg-blue-600"

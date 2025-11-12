@@ -1,22 +1,25 @@
+
 "use server"
 import { createSupabaseAdmin } from "@/lib/supabase";
+import { getMemberId } from "./getMemberId";
 
+export async function requestBorrow(book_id: number, request_status_id: number) {
+  const supabaseAdmin = await createSupabaseAdmin();
+  const memberId = await getMemberId();
+console.log('memberId', memberId)
+  if (!memberId) {
+    return { success: false, message: "Not logged in" };
+  }
 
-export async function requestBorrow(book_id: number,member_id:string,request_status_id:number) {
-    const supabase = await createSupabaseAdmin()
+  const { data, error } = await supabaseAdmin
+    .from("book_request")
+    .insert([{ book_id, member_id: memberId, request_status_id }])
+    .select();
 
-    try{
-        const res = supabase
-        .from("book_request")
-        .insert([{
-            book_id: book_id,
-            member_id: member_id,
-            request_status_id: request_status_id,
-        }])
-        .select(); 
-       
-        return res;
-    }catch(error){
-        console.log('error:', error)
-    }
+  if (error) {
+    return { success: false, message: error.message };
+  }
+
+  return { success: true, data };
 }
+
