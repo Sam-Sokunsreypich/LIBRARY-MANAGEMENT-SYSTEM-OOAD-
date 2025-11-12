@@ -2,11 +2,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import StatCard from "@/components/StatCard";
-import BorrowingChart from "@/components/BorrowingChart";
-import TopBooksChart from "@/components/TopBooksChart";
-import RecentActivityTable from "@/components/RecentActivityTable";
+// import { supabase } from "@/lib/supabaseClient";
+import StatCard from "../components/StatCard";
+import BorrowingChart from "../components/BorrowingChart";
+import TopBooksChart from "../components/TopBooksChart";
+import RecentActivityTable from "../components/RecentActivityTable";
+import { createSupabaseAdmin } from "@/lib/supabase";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -20,6 +21,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function fetchData() {
+      const supabase = await createSupabaseAdmin();
       // Example: adjust to your real Supabase table names
       const { count: totalBooks } = await supabase
         .from("books")
@@ -55,7 +57,7 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className=" ml-64 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">

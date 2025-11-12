@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -17,9 +16,9 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
-import { IPermission } from "@/lib/types";
 import { updateMemberBasicById } from "../../actions";
 import { useTransition } from "react";
+import type { Member } from "@/lib/types";
 
 const FormSchema = z.object({
 	name: z.string().min(2, {
@@ -27,34 +26,30 @@ const FormSchema = z.object({
 	}),
 });
 
-export default function BasicForm({ permission }: { permission: IPermission }) {
+export default function BasicForm({ member }: { member: Member }) {
 	const [isPending, startTransition] = useTransition();
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			name: permission.member.name,
+			name: member?.name || "",
 		},
 	});
 
 	function onSubmit(data: z.infer<typeof FormSchema>) {
 		startTransition(async () => {
-			const { error } = JSON.parse(
-				await updateMemberBasicById(permission.member_id, data)
-			);
+			const { error } = JSON.parse(await updateMemberBasicById(member.memberId, data));
 			if (error?.message) {
-				toast.error(
-					"Fail to update",{
+				toast.error("Failed to update", {
 					description: (
 						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-							<code className="text-white">error?.message</code>
+							<code className="text-white">{error.message}</code>
 						</pre>
 					),
 				});
 			} else {
-				toast(
-					 "successfully update",
-				);
+				document.getElementById("create-trigger")?.click();
+				toast.success("Successfully updated!");
 			}
 		});
 	}
@@ -72,7 +67,7 @@ export default function BasicForm({ permission }: { permission: IPermission }) {
 						<FormItem>
 							<FormLabel>Display Name</FormLabel>
 							<FormControl>
-								<Input placeholder="shadcn" {...field} />
+								<Input placeholder="name" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -85,7 +80,7 @@ export default function BasicForm({ permission }: { permission: IPermission }) {
 				>
 					Update{" "}
 					<AiOutlineLoading3Quarters
-						className={cn(" animate-spin", "hidden")}
+						className={cn("animate-spin", { hidden: !isPending })}
 					/>
 				</Button>
 			</form>
