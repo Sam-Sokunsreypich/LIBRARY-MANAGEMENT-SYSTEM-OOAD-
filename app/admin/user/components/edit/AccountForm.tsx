@@ -17,29 +17,32 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
+import { IPermission } from "@/lib/types/type";
 import { useTransition } from "react";
-import { updateMemberAccountById } from "../../actions";
-import type { Member } from "@/lib/types";
-
+import { updateMemberAcccountById } from "../../actions";
 
 const FormSchema = z
 	.object({
-		email: z.string().email("Invalid email"),
+		email: z.string().email(),
 		password: z.string().optional(),
 		confirm: z.string().optional(),
 	})
-	.refine((data) => data.password === data.confirm, {
-		message: "Password doesn't match",
+	.refine((data) => data.confirm === data.password, {
+		message: "Passowrd doesn't match",
 		path: ["confirm"],
 	});
 
-export default function AccountForm({member}:{member:Member}) {
+export default function AccountForm({
+	permission,
+}: {
+	permission: IPermission;
+}) {
 	const [isPending, startTransition] = useTransition();
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			email: member.email,
+			email: permission.member.email,
 			password: "",
 			confirm: "",
 		},
@@ -48,28 +51,31 @@ export default function AccountForm({member}:{member:Member}) {
 	function onSubmit(data: z.infer<typeof FormSchema>) {
 		startTransition(async () => {
 			const { error } = JSON.parse(
-				await updateMemberAccountById(member.memberId, data)
+				await updateMemberAcccountById(permission.member_id, data)
 			);
-
 			if (error?.message) {
-				toast.error("Failed to update", {
+				toast(
+					"Fail to update",{
 					description: (
 						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-							<code className="text-white">{error.message}</code>
+							<code className="text-white">error?.message</code>
 						</pre>
 					),
 				});
 			} else {
-				document.getElementById("create-trigger")?.click();
-				toast.success("Successfully updated!");
+				toast(
+					"successfully update",
+				);
 			}
 		});
 	}
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-				{/* Email */}
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="w-full space-y-6"
+			>
 				<FormField
 					control={form.control}
 					name="email"
@@ -78,17 +84,16 @@ export default function AccountForm({member}:{member:Member}) {
 							<FormLabel>Email</FormLabel>
 							<FormControl>
 								<Input
-									type="email"
 									placeholder="email@gmail.com"
+									type="email"
 									{...field}
+									onChange={field.onChange}
 								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-
-				{/* Password */}
 				<FormField
 					control={form.control}
 					name="password"
@@ -96,14 +101,16 @@ export default function AccountForm({member}:{member:Member}) {
 						<FormItem>
 							<FormLabel>Password</FormLabel>
 							<FormControl>
-								<Input type="password" placeholder="******" {...field} />
+								<Input
+									placeholder="******"
+									type="password"
+									onChange={field.onChange}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-
-				{/* Confirm Password */}
 				<FormField
 					control={form.control}
 					name="confirm"
@@ -111,23 +118,24 @@ export default function AccountForm({member}:{member:Member}) {
 						<FormItem>
 							<FormLabel>Confirm Password</FormLabel>
 							<FormControl>
-								<Input type="password" placeholder="******" {...field} />
+								<Input
+									placeholder="******"
+									type="password"
+									onChange={field.onChange}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-
-				{/* Submit Button */}
 				<Button
 					type="submit"
 					className="flex gap-2 items-center w-full"
 					variant="outline"
-					disabled={isPending}
 				>
 					Update
 					<AiOutlineLoading3Quarters
-						className={cn("animate-spin", { hidden: !isPending })}
+						className={cn(" animate-spin", "hidden")}
 					/>
 				</Button>
 			</form>

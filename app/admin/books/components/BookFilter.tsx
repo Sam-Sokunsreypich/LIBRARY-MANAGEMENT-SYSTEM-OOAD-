@@ -47,11 +47,14 @@ export default function BookFilter({ onFilterSubmit }: BookFilterProps) {
     queryFn: fetchCategoriesAndSubcategories,
   });
 
-  const filteredSubcategories =
-    data?.subcategories.filter(
-      (sub: Subcategories) =>
-        String(sub.category_id) === String(selectedCategoryId)
-    ) || [];
+const filteredSubcategories =
+  selectedCategoryId && selectedCategoryId !== ""
+    ? data?.subcategories.filter(
+        (sub: Subcategories) =>
+          String(sub.category_id) === String(selectedCategoryId)
+      ) || []
+    : data?.subcategories || [];
+
 
   // Reset subcategory when category changes
   useEffect(() => {

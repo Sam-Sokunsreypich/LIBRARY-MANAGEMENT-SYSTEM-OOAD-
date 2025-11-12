@@ -7,9 +7,13 @@ import SearchBar from "./components/component/SearchBar";
 import { getMembers } from "./actions/fetchMembersClient";
 import CreateMember from "./components/create/CreateMember";
 import EditDialogForm from "./components/edit/EditDialog";
-import type { Permission } from "@/lib/types";
-
-export default function UserManagement({member}: {member: Permission}) {
+import type { Member, Permission } from "@/lib/types";
+import DeleteMember from "./components/component/DeleteMember";
+import EditForm from "./components/edit/EditorForm";
+import BasicForm from "./components/edit/BasicForm";
+import BasicEdit from "./components/create/BasicEdit";
+import EditMember from "./components/create/EditMember";
+export default function UserManagement({member}: {member: Member}) {
   const [role, setRole] = useState("user");
 
   const { data, isLoading, error } = useQuery({
@@ -69,22 +73,33 @@ export default function UserManagement({member}: {member: Permission}) {
                     <td className="px-4 py-2 border-t">{m.name}</td>
                     <td className="px-4 py-2 border-t">{m.email}</td>
                     <td className="px-4 py-2 border-t">
-                      <span className="bg-purple-200 p-1 border-2 border-purple-700 rounded-xl text-purple-700">{m.role}</span>
+                      <span className={`px-2 py-1 border rounded-xl ${
+                        m.role === "admin"
+                        ? "bg-yellow-200 border-amber-600 text-amber-600"
+                        : m.role === "user"
+                        ? "bg-purple-200 border-indigo-600 text-indigo-600"
+                        : m.role === 'staff'
+                        ? "bg-pink-200 border-pink-700 text-pink-700"
+                        : "bg-gray-500"
+                      }`}>
+                        {m.role}
+                        </span>
                       </td>
                     <td className="px-4 py-2 border-t">
                       <span className={`p-1 rounded-2xl ${
                         m.status === "active"
-                        ? "bg-green-200 text-green-700 border-green-700 border-2"
+                        ? "bg-green-200 text-green-700 border-green-700 border"
                         : m.status === "resigned"
-                        ? "bg-red-200 text-red-700 border-red-700 border-2"
+                        ? "bg-red-200 text-red-700 border-red-700 border"
                         : "bg-gray-400"
                       }`}>
                         {m.status}
                       </span>
                     </td>
                     <td className="px-4 py-2 border-t">{m.created_at}</td>
-                    <td className="px-4 py-2 border-t">
-                      <EditDialogForm member={m}/>
+                    <td className="flex px-4 py-2 gap-2 border-t">
+                      <EditMember member={m}/>
+                      <DeleteMember user_id={m.id}/>
                     </td>
                   </tr>
                 ))}

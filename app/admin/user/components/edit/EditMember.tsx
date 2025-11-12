@@ -1,59 +1,92 @@
-import { 
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger
-} from "@/components/ui/tabs";
-import BasicForm from "./BasicForm";
-import AccountForm from "./AccountForm";
-import AdvancedForm from "./AdvancedForm";
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
-import { Permission } from "@/lib/types";
-import { Member } from "@/lib/types";
+import { IPermission } from "@/lib/types/type";
+import { updateMemberBasicById } from "../../actions";
+import { useTransition } from "react";
 
+const FormSchema = z.object({
+	name: z.string().min(2, {
+		message: "Name must be at least 2 characters.",
+	}),
+});
 
-export default function EditForm({
-    isAdmin,
-    member,
-    permission
-}: {
-    isAdmin?: boolean;
-    member: Member;
-    permission: Permission;
-}) {
-    return (
-        <Tabs defaultValue="basic" className="w-full space-y-6">
-            <TabsList
-                className={cn(
-                    "grid w-full",
-                    isAdmin ? "grid-cols-3" : "grid-cols-1"
-                )}
-            >
-                <TabsTrigger value="basic">Basic</TabsTrigger>
-                {isAdmin && (
-                    <>
-                        <TabsTrigger value="account">Account</TabsTrigger>
-                        <TabsTrigger value="advance">Advanced</TabsTrigger>
-                    </>
-                )}
-            </TabsList>
+export default function BasicForm({ permission }: { permission: IPermission }) {
+	const [isPending, startTransition] = useTransition();
 
-            {/* Basic Tab */}
-            <TabsContent value="basic">
-                <BasicForm member={member} />
-            </TabsContent>
+	const form = useForm<z.infer<typeof FormSchema>>({
+		resolver: zodResolver(FormSchema),
+		defaultValues: {
+			name: permission.member.name,
+		},
+	});
 
-            {/* Admin Tabs */}
-            {isAdmin && (
-                <>
-                    <TabsContent value="account">
-                        <AccountForm member={member} />
-                    </TabsContent>
-                    <TabsContent value="advance">
-                        <AdvancedForm permission={permission} />
-                    </TabsContent>
-                </>
-            )}
-        </Tabs>
-    );
+	function onSubmit(data: z.infer<typeof FormSchema>) {
+		startTransition(async () => {
+			const { error } = JSON.parse(
+				await updateMemberBasicById(permission.member_id, data)
+			);
+			if (error?.message) {
+				toast("Fail to update",{
+					description: (
+						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+							<code className="text-white">error?.message</code>
+						</pre>
+					),
+				});
+			} else {
+				toast("successfully update",
+				);
+			}
+		});
+	}
+
+	return (
+		<Form {...form}>
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="w-full space-y-6"
+			>
+				<FormField
+					control={form.control}
+					name="name"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Display Name</FormLabel>
+							<FormControl>
+								<Input placeholder="shadcn" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<Button
+					type="submit"
+					className="flex gap-2 items-center w-full"
+					variant="outline"
+				>
+					Update{" "}
+					<AiOutlineLoading3Quarters
+						className={cn(" animate-spin", "hidden")}
+					/>
+				</Button>
+			</form>
+		</Form>
+	);
 }

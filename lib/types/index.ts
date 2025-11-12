@@ -1,13 +1,21 @@
+// types.ts
+
 export type Member = {
-    memberId: string;
+    id: string;
+    identity: string; 
+    profile_image: string;
     name: string;
     email: string;
-    created_at: string;
+    password: string;
+    faculty_id: string;
+    department_id: string;
+    description: string;
 }
 
 export type Permission = {
-    permissionId: string;
+    permission_id: string;
     role: "user" | "staff" | "admin";
     status: "active" | "resigned";
+    member_id: string;
     member: Member;
 }

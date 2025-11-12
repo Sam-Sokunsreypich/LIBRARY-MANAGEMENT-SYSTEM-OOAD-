@@ -12,16 +12,16 @@ import DeleteButton from "./DeleteButton";
 
 const BookCard = ({ book }: { book: Books }) => (
     <div className="w-50 p-2 border border-gray-500 rounded-md bg-white hover:shadow-lg transition-shadow">
-        <div className="h-60">
-        <Image 
+        <div className="h-55 overflow-hidden flex items-center justify-center bg-gray-50">
+      <Image
         src={book.book_image}
         alt={book.book_title || "Book image"}
-        className="p-1 ml-1"
         width={170}
-        height={0}
-        />
+        height={200}
+        className="object-contain max-h-full transition-transform duration-200 group-hover:scale-105"
+      />
         </div>
-        <h3 className="mt-2 font-bold text-sm text-indigo-700">{book.book_title}</h3>
+        <h3 className="w-30 truncate mt-2 font-bold text-sm text-indigo-700">{book.book_title}</h3>
         <p className="text-sm">Book ID: {book.book_id}</p>
         <p className="text-sm">Location: {book.book_location}</p>
         <div className="flex gap-2 justify-end items-center mt-2">

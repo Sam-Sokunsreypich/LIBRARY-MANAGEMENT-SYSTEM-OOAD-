@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import imageCompression from "browser-image-compression";
 import { createSupabaseBrowserClient } from "./browser";
+import { success } from "zod";
 
 async function getStorage(){
     const supabase = await createSupabaseBrowserClient();
@@ -39,4 +40,23 @@ export async function uploadImage({file, bucket, folder}: UploadProps){
     const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${data?.path}`;
 
     return {imageUrl, error: ""};
+}
+
+export async function deleteImage({imageUrl, bucket}: {imageUrl: string, bucket: string}){
+    if(!imageUrl) return {success: false, error: "No image URL provided"};
+
+    try{
+        const storage = await getStorage();
+
+        const path = imageUrl.split(`${bucket}/`)[1];
+        if(!path) throw new Error("Invalid image URL format");
+
+        const { error } = await storage.from(bucket).remove([path]);
+        if(error) throw error;
+
+        return { success:true, error: ""}
+    }catch (error: any){
+        console.error("Failed to delete image", error.message);
+        return {success: false, error: error.message};
+    }
 }

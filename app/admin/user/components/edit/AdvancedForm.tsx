@@ -24,56 +24,56 @@ import {
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
+import { IPermission } from "@/lib/types/type";
 import { updateMemberAdvanceById } from "../../actions";
 import { useTransition } from "react";
-import type { Permission } from "@/lib/types";
 
 const FormSchema = z.object({
-	role: z.enum(["admin", "user", "staff"]),
+	role: z.enum(["admin", "user"]),
 	status: z.enum(["active", "resigned"]),
 });
 
-export default function AdvancedForm({ permission }: { permission: Permission }) {
+export default function AdvanceForm({
+	permission,
+}: {
+	permission: IPermission;
+}) {
 	const [isPending, startTransition] = useTransition();
 
-	const roles = ["admin", "user", "staff"] as const;
-	const statuses = ["active", "resigned"] as const;
+	const roles = ["admin", "user"];
+	const status = ["active", "resigned"];
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			role: permission.role || "user",
-			status: permission.status || "active",
+			role: permission.role,
+			status: permission.status,
 		},
 	});
 
 	function onSubmit(data: z.infer<typeof FormSchema>) {
 		startTransition(async () => {
-			try {
-				const { error } = JSON.parse(
-					await updateMemberAdvanceById(permission.permissionId, data)
+			const { error } = JSON.parse(
+				await updateMemberAdvanceById(
+					permission.id,
+					permission.member_id,
+					data
+				)
+			);
+			if (error?.message) {
+				toast("Fail to update",{
+					description: (
+						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+							<code className="text-white">error?.message</code>
+						</pre>
+					),
+				});
+			} else {
+				toast("successfully update",
 				);
-
-				if (error?.message) {
-					toast.error("Failed to update", {
-						description: (
-							<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-								<code className="text-white">{error.message}</code>
-							</pre>
-						),
-					});
-				} else {
-					document.getElementById("create-trigger")?.click();
-					toast.success("Successfully updated!");
-				}
-			} catch (err) {
-				toast.error("Unexpected error");
-				console.error(err);
 			}
 		});
 	}
-
-	if (!permission) return null;
 
 	return (
 		<Form {...form}>
@@ -81,7 +81,6 @@ export default function AdvancedForm({ permission }: { permission: Permission })
 				onSubmit={form.handleSubmit(onSubmit)}
 				className="w-full space-y-6"
 			>
-				{/* Role Field */}
 				<FormField
 					control={form.control}
 					name="role"
@@ -89,8 +88,8 @@ export default function AdvancedForm({ permission }: { permission: Permission })
 						<FormItem>
 							<FormLabel>Role</FormLabel>
 							<Select
-								value={field.value}
 								onValueChange={field.onChange}
+								defaultValue={field.value}
 							>
 								<FormControl>
 									<SelectTrigger>
@@ -98,19 +97,23 @@ export default function AdvancedForm({ permission }: { permission: Permission })
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									{roles.map((role) => (
-										<SelectItem key={role} value={role}>
-											{role}
-										</SelectItem>
-									))}
+									{roles.map((role, index) => {
+										return (
+											<SelectItem
+												value={role}
+												key={index}
+											>
+												{role}
+											</SelectItem>
+										);
+									})}
 								</SelectContent>
 							</Select>
+
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-
-				{/* Status Field */}
 				<FormField
 					control={form.control}
 					name="status"
@@ -118,8 +121,8 @@ export default function AdvancedForm({ permission }: { permission: Permission })
 						<FormItem>
 							<FormLabel>Status</FormLabel>
 							<Select
-								value={field.value}
 								onValueChange={field.onChange}
+								defaultValue={field.value}
 							>
 								<FormControl>
 									<SelectTrigger>
@@ -127,30 +130,35 @@ export default function AdvancedForm({ permission }: { permission: Permission })
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									{statuses.map((status) => (
-										<SelectItem key={status} value={status}>
-											{status}
-										</SelectItem>
-									))}
+									{status.map((status, index) => {
+										return (
+											<SelectItem
+												value={status}
+												key={index}
+											>
+												{status}
+											</SelectItem>
+										);
+									})}
 								</SelectContent>
 							</Select>
 							<FormDescription>
-								“Resigned” means the user no longer works here.
+								status resign mean the user is no longer work
+								here.
 							</FormDescription>
+
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-
 				<Button
 					type="submit"
 					className="flex gap-2 items-center w-full"
 					variant="outline"
-					disabled={isPending}
 				>
-					Update
+					Update{" "}
 					<AiOutlineLoading3Quarters
-						className={cn("animate-spin", { hidden: !isPending })}
+						className={cn(" animate-spin", "hidden")}
 					/>
 				</Button>
 			</form>
