@@ -27,10 +27,10 @@ export async function createMember(data: Partial<{
       .select("description_id")
       .single();
 
-    if (descriptionError) throw descriptionError;
+if (descriptionError) throw descriptionError;
 
     const descriptionId = descriptionData?.description_id;
-
+  
     // 2️.Insert into user_info table
     const { data: infoData, error: infoError } = await supabase
       .from("user_info")
@@ -88,11 +88,11 @@ export async function createMember(data: Partial<{
     // 6️. Revalidate admin user page
     revalidatePath("/admin/user");
 
-    return { success: true, userId };
+   return JSON.stringify({ success: true, userId });
 
   } catch (err) {
     console.error("Failed to create member:", err);
-    return { success: false, error: err };
+    return JSON.stringify({ success: false, error: err instanceof Error ? err.message : err });
   }
 }
 
@@ -122,7 +122,7 @@ export async function updateMemberBasicById(
     id: string,
     data: Partial<{ 
       identity: string,
-      profile_image: string
+      profile_image: string | null,
       name: string,
       email: string,
       password: string,
@@ -142,7 +142,7 @@ export async function updateMemberBasicById(
 
     revalidatePath("");
 
-    return updatedData;
+    return JSON.stringify(updatedData);
 }
 
 //Update Member Info Advanced

@@ -28,12 +28,12 @@ const BasicSchema = z.object({
     password: z
         .string()
         .min(6, { message: "Password should be 6 characters" }).optional(),
-	});
+  });
 
 export default function BasicEdit({ member }: { member: Member }) {
     const [imageUrls, setImageUrls] = useState<string[]>(
-		member.profile_image ? [member.profile_image] : []
-	);
+    member.profile_image ? [member.profile_image] : []
+  );
     const [isPending, startTransition] = useTransition();
 
     const form = useForm<z.infer<typeof BasicSchema>>({
@@ -114,15 +114,16 @@ export default function BasicEdit({ member }: { member: Member }) {
         });
     }
 
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col justify-center">
                 {/* Profile Image */}
-				<FormLabel>Profile Image:</FormLabel>
-				<div className="flex gap-4">
-					{/* ProfileButton will show existing image */}
-					<ProfileButton imageUrls={imageUrls} setImageUrls={setImageUrls} />
-				</div>
+        <FormLabel>Profile Image:</FormLabel>
+        <div className="flex gap-4">
+          {/* ProfileButton will show existing image */}
+          <ProfileButton imageUrls={imageUrls} setImageUrls={setImageUrls} />
+        </div>
 
                 {/* Member ID */}
                 <FormField

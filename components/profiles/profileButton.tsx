@@ -38,7 +38,7 @@ export default function ProfileButton({ imageUrls, setImageUrls }: ProfileButton
 				{imageUrls.length > 0 ? (
 					<Image
 						src={imageUrls[0]}
-						alt="Profile"
+						alt="uploaded-image"
 						fill
 						sizes="128px"
 						className="object-cover transition-transform duration-200 group-hover:scale-105"

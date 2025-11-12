@@ -6,7 +6,7 @@ import { Member } from "@/lib/types";
 import BasicEdit from "./BasicEdit";
 
 interface BasicMembersProps{
-    member: Member
+    member: Member;
 }
 export default function EditMember({ member }: BasicMembersProps) {
   return (
