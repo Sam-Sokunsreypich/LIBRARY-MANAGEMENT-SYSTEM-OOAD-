@@ -9,7 +9,7 @@ import BookRequestCard from "@/components/book_request/BookRequestCard";
 export default function page() {
 
   const [request, setRequest] = useState<BookRequestType[]>([]);
-const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
 
 useEffect( ()=>{
   async function fetchRequests() {
