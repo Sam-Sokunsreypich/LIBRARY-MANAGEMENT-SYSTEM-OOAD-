@@ -11,6 +11,7 @@ export default function BorrowRequestsPage() {
  
   const [requests, setRequest] = useState<BookRequestType[]>([]);
   const [loading, setLoading] = useState(true)
+  // const [took, setTook] = useState<BookRequestType[]>([])
   
   useEffect( ()=>{
     async function fetchRequests() {
@@ -26,6 +27,21 @@ export default function BorrowRequestsPage() {
     }
     fetchRequests();
   }, []);
+
+  // useEffect( ()=>{
+  //   async function fetchRequests() {
+  //     try {
+  //       const res = await getMonitoring();
+        
+  //       setRequest(res.filter((r)=>r.request_status.status_name === "APPROVE" && r.took_book === false));
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   fetchRequests();
+  // }, []);
 
 console.log('requests', requests)
   return (

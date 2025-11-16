@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 
 interface Member{
     id: string;
+    profile_image: string;
     name: string;
     email: string;
     created_at: string;
@@ -33,7 +34,7 @@ async function fetchData(){
     // 1. Fetch all Members
     const { data: members, error: memberError } = await supabase
     .from("member")
-    .select("id, name, created_at, email, identity");
+    .select("id, name, profile_image, created_at, email, identity");
 
     if(memberError){
         console.error("Error fetching members: ", memberError.message);
