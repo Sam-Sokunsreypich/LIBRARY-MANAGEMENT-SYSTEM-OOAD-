@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { CountData } from "@/types/CountData";
 import { getCount } from "../admin/book_requests/action/getCount";
+import ProfileIcon from "../admin/user/components/component/ProfileIcon";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -63,6 +64,7 @@ export default function DashboardPage() {
 
   return (
     <div className="p-6">
+      <ProfileIcon/>
       <h1 className="text-2xl font-bold mb-6">Dashboard Overview</h1>
 
       {/* Statistic cards */}

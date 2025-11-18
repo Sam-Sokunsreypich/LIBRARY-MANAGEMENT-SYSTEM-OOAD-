@@ -77,17 +77,11 @@ const DetailPage: React.FC = () => {
             <p className="text-gray-700">
               <span className="font-semibold">author :</span> {book?.author.first_name} {book?.author.last_name}
             </p>
-            {/* <p className="text-gray-700">
-              <span className="font-semibold">publisher :</span>{" "}
-              {book?.publisher}
-            </p> */}
             <p className="text-gray-700">
               <span className="font-semibold">publication year :</span>{" "}
               {book?.publication_year}
             </p>
-            {/* <p className="text-gray-700">
-              <span className="font-semibold">pages :</span> {book.pages}
-            </p> */}
+            <p>Book Location: {book?.book_location}</p>
           </div>
         </div>
 

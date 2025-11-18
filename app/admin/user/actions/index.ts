@@ -52,6 +52,9 @@ if (descriptionError) throw descriptionError;
       password: data.password!,
       email_confirm: true,
       user_metadata: { 
+        display_name: data.name,
+        profile_image: data.profile_image,
+        email: data.email,
         role: data.role,
         status: data.status },
     });

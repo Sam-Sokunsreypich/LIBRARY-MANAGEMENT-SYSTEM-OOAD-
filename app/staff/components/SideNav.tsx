@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOut from "./SignOut";
+import ProfileDialog from "@/app/admin/user/components/create/LogFrom";
 
 export default function SideNav() {
   const pathname = usePathname();
@@ -32,8 +33,8 @@ export default function SideNav() {
             {item.label}
           </Link>
         ))}
-        <div className="mt-80">
-          <SignOut />
+        <div className=" flex mt-90 justify-end">
+         <ProfileDialog/>
         </div>
       </nav>
     </aside>

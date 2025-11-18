@@ -78,7 +78,6 @@ export default function BookCard({ book  }: Prop) {
       </div>
       </button>
 
-      Action Buttons
       <div className="flex gap-2 mt-3 justify-center">
         {/* Favorite Button */}
         {/* <button

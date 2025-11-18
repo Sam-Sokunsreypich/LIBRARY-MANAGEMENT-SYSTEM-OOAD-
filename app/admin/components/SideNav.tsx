@@ -8,6 +8,7 @@ import ToggleSidebar from "./ToggleSidebar";
 import { Button } from "@/components/ui/button";
 import LogForm from "../user/components/create/LogFrom";
 import { Member } from "@/lib/types";
+import ProfileDialog from "../user/components/create/LogFrom";
 
 export default function SideNav() {
   const [isOpen, setIsOpen] = useState(true);
@@ -52,8 +53,7 @@ export const SideBar = ({ member, className, toggle }: SideBarProps) => {
           <NavLinks />
         </div>
         <div className="flex justify-end mr-2 mb-2">
-          <SignOut/>
-          {/* <LogForm member={member}/> */}
+          <ProfileDialog/>
         </div>
       </div>
     </div>

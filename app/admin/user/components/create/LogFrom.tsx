@@ -1,29 +1,21 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import DialogForm from "../edit/DialogForm";
-import BasicForm from "../edit/BasicForm";
-import { Member } from "@/lib/types";
-import BasicEdit from "./BasicEdit";
-import { FaGear } from "react-icons/fa6";
-import Log from "./Log";
+import { Button } from "@/components/ui/button";
+import { RxGear } from "react-icons/rx";
+import ProfileForm from "./Log";
 
-interface BasicMembersProps{
-    member: Member
-}
-export default function LogForm({ member }: BasicMembersProps) {
-  return (
-    <DialogForm
-      id="edit-trigger"
-      title="Edit Member"
-      Trigger={
-        <Button
-          className="bg-white
-          "
-        >
-          <FaGear className="text-black"/>
-        </Button>
-      }
-      form={<Log member={member} />}
-    />
-  );
+export default function ProfileDialog(){
+    return(
+        <DialogForm
+        id="profile-setting"
+        title="Profile Setting"
+        Trigger = {
+            <Button
+            className="bg-transparent hover:bg-transparent">
+                <RxGear className="text-black hover:text-black"/>
+            </Button>
+        }
+        form = {<ProfileForm/>}
+        />
+    )
 }
