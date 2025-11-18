@@ -51,9 +51,9 @@ export const SideBar = ({ member, className, toggle }: SideBarProps) => {
           </div>
           <NavLinks />
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end mr-2 mb-2">
           <SignOut/>
-          <LogForm member={member}/>
+          {/* <LogForm member={member}/> */}
         </div>
       </div>
     </div>

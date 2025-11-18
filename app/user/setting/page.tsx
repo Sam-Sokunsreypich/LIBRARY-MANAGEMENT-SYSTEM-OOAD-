@@ -27,7 +27,7 @@ export default function ProfilePage() {
           <div className={styles.topSection}>
             {/* Avatar upload */}
             <label className={styles.avatarWrapper}>
-              <img src={profileImage} alt="Profile" className={styles.avatarImage} />
+              <img src="https://dthcmidmavrmnaqfixee.supabase.co/storage/v1/object/public/book_image/profile/fa272091-20db-4ec6-a9ef-536928955a3b.jpeg" alt="Profile" className={styles.avatarImage} />
               <input type="file" accept="image/*" onChange={handleImageChange} className={styles.fileInput}/>
             </label>
           </div>

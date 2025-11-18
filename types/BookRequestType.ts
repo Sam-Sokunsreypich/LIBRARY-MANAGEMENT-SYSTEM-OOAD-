@@ -7,15 +7,24 @@ export interface BookRequestType {
     };
     took_book: boolean;
     book_issue: boolean;
-    fine: number;
+    rules: {
+      fine_id: number;
+      title: string;
+      fine:number;
+    };
     member: {
-      id: number;
+      id: string;
       email: string;
       name: string;
     };
     books: {
       id: number;
       book_title: string;
+      book_image:string
     };
+    reject_reason:string;
+    start_date: string;
+    end_date:string;
+    pay_fine: boolean;
   }
   

@@ -4,7 +4,7 @@ import { revalidatePath, unstable_noStore } from "next/cache";
 import { readUserSession } from "@/lib/actions";
 
 //Create Member
-export async function createMember(data: {
+export async function createMember(data: Partial<{
   identity: string;
   profile_image: string;
   email: string;
@@ -15,7 +15,7 @@ export async function createMember(data: {
   faculty_id: string;
   department_id: string;
   description: string;
-}) {
+}>) {
 
   const supabase = await createSupabaseAdmin();
 
