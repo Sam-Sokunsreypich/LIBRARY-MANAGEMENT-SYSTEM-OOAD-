@@ -19,7 +19,7 @@ export default function Bar() {
 
           {/* Logo */}
           <div className="">
-            <Link href="/" className="text-xl font-bold text-indigo-600">
+            <Link href="/" className="text-xl font-bold text-amber-800">
               LibraryMS
             </Link>
           </div>

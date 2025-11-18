@@ -4,8 +4,8 @@ import { revalidatePath, unstable_noStore } from "next/cache";
 import { readUserSession } from "@/lib/actions";
 
 //Create Member
-export async function createMember(data: {
-  member_id: string;
+export async function createMember(data: Partial<{
+  identity: string;
   profile_image: string;
   email: string;
   password: string;
@@ -15,7 +15,7 @@ export async function createMember(data: {
   faculty_id: string;
   department_id: string;
   description: string;
-}) {
+}>) {
 
   const supabase = await createSupabaseAdmin();
 
@@ -52,6 +52,9 @@ if (descriptionError) throw descriptionError;
       password: data.password!,
       email_confirm: true,
       user_metadata: { 
+        display_name: data.name,
+        profile_image: data.profile_image,
+        email: data.email,
         role: data.role,
         status: data.status },
     });
@@ -64,7 +67,7 @@ if (descriptionError) throw descriptionError;
     // 4️. Insert into member table
     const { error: memberError } = await supabase.from("member").insert({
       id: userId,
-      member_id: data.member_id,
+      identity: data.identity,
       profile_image: data.profile_image,
       name: data.name,
       email: data.email,

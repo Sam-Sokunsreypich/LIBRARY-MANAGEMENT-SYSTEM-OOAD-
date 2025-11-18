@@ -9,6 +9,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Image from "next/image";
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
+import CreateBook from "./CreateBook";
 
 const BookCard = ({ book, index }: { book: Books; index: number }) => (
   <div
@@ -85,6 +86,7 @@ export default function BookCatalog() {
     <div className="w-full">
       <div className="flex justify-between gap-5 mb-6">
         <BookFilter onFilterSubmit={handleFilter} />
+        <CreateBook/>
       </div>
 
       <div className="border-t pt-6">
