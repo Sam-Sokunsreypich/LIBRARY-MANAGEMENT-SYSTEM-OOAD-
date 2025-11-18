@@ -79,12 +79,12 @@ export default function BookTookCard({ request }: Props) {
                     }
                   `}
                 >
-                  {isTaken ? "Took" : "Approved"}
+                  {isTaken ? "Tooken" : "Approved"}
                 </div>
 
                 {/* Take Button */}
                 {!isTaken && (
-                  <Button onClick={handleTake} disabled={loading}>
+                  <Button className="bg-green-600" onClick={handleTake} disabled={loading}>
                     {loading ? "Processing..." : "Take"}
                   </Button>
                 )}

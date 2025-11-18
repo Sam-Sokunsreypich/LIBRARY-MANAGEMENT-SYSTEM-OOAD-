@@ -26,20 +26,18 @@ export async function rejectRequest(
   return { message: "Reject updated successfully!" }
 }
 
-export async function approveRequest(id: number,
-  data:{
-    start_date: string,
-    end_date: string,
-  }) {
+export async function approveRequest(id: number) {
   const supabase = await createSupabaseAdmin()
-
+    const now = new Date();
+const endDate = new Date();
+endDate.setDate(now.getDate() + 14);
   const { error } = await supabase
     .from("book_request")
     .update({
       request_status_id: 2,
       took_book: "false",
-      start_date: data.start_date,
-      end_date: data.end_date
+      start_date: now.toISOString(),
+    end_date: endDate.toISOString()
     })
     .eq("id",id)
 

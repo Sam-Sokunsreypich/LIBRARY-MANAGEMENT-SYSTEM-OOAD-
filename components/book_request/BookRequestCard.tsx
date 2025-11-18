@@ -27,13 +27,13 @@ interface Props {
 export default function BookRequestCard({ borrowRequest }: Props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  async function onApprove(data: { start_date: string; end_date: string }) {
+  async function onApprove() {
     try{
       if (!borrowRequest?.id) {
         toast.error("Missing request ID!");
         return;
       }
-      await approveRequest(borrowRequest.id, data);
+      await approveRequest(borrowRequest.id);
       setIsEditModalOpen(false)
       toast.success("Rule Approved successfully!");
     }catch (error) {

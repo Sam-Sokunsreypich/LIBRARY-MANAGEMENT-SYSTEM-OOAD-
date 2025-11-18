@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import NotificationBell from "./components/NotificationBell";
 import SideNav from "./components/SideNav";
+import { Toaster } from "sonner";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -44,7 +45,7 @@ export default function StaffLayout({ children }: { children: ReactNode }) {
       <SideNav />
 
       {/* Main Section */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 ml-64 flex flex-col">
         {/* Top Bar */}
         {/* <header className="flex justify-between items-center bg-orange-500 px-6 py-3 border-b">
           <h1 className="text-xl font-bold text-white">
@@ -66,6 +67,7 @@ export default function StaffLayout({ children }: { children: ReactNode }) {
 
         {/* Page Content */}
         <main className="p-6 flex-1">{children}</main>
+        <Toaster position="top-right" richColors />
       </div>
     </div>
   );

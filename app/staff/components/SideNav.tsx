@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOut from "./SignOut";
+import { cn } from "@/lib/utils";
 
 export default function SideNav() {
   const pathname = usePathname();
@@ -16,7 +17,8 @@ export default function SideNav() {
   ];
 
   return (
-    <aside className="w-64 bg-white border-r shadow-sm ">
+    <aside className={cn(
+              "h-screen border-r w-64 bg-background transition-all duration-0 fixed top-0 left-0 z-20")}>
       <h2 className="text-xl font-bold mb-6 p-2  text-white bg-orange-500 text-center h-12" > Staff Panel</h2>
       <nav className="space-y-2 ">
         {navItems.map((item) => (
