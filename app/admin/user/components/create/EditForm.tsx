@@ -114,8 +114,8 @@ export default function EditForm({ member }: { member: Member }) {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col justify-center">
-                {/* Book Image */}
-                <FormLabel>Book Image:</FormLabel>
+                {/* Profile Image */}
+                <FormLabel>Profile Image</FormLabel>
                 <div className="flex h-59 justify-center">
                     <ProfileButton imageUrls={imageUrls} setImageUrls={setImageUrls} />
                 </div>

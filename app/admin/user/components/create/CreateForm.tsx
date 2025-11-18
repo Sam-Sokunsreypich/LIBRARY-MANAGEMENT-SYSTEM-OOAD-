@@ -51,9 +51,9 @@ const FormSchema = z
 		confirm: z
 			.string()
 			.min(6, { message: "Password should be 6 characters" }),
-		faculty_id: z.string().optional(),
-		department_id: z.string().optional(),
-		description: z.string().optional(),
+		faculty_id: z.string(),
+		department_id: z.string(),
+		description: z.string(),
 	})
 	.refine((data) => data.confirm === data.password, {
 		message: "Passowrd doesn't match",

@@ -5,7 +5,7 @@ import { readUserSession } from "@/lib/actions";
 
 //Create Member
 export async function createMember(data: {
-  member_id: string;
+  identity: string;
   profile_image: string;
   email: string;
   password: string;
@@ -64,7 +64,7 @@ if (descriptionError) throw descriptionError;
     // 4️. Insert into member table
     const { error: memberError } = await supabase.from("member").insert({
       id: userId,
-      member_id: data.member_id,
+      identity: data.identity,
       profile_image: data.profile_image,
       name: data.name,
       email: data.email,

@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { fetchCategoriesAndSubcategories } from "@/lib/api";
 import { Categories, Subcategories } from "@/lib/types/booktype";
+import CreateBook from "./CreateBook";
 
 const FilterSchema = z.object({
   categoryId: z.string().optional(),
@@ -56,7 +57,6 @@ const filteredSubcategories =
     : data?.subcategories || [];
 
 
-  // Reset subcategory when category changes
   useEffect(() => {
     form.setValue("subcategoryId", "");
   }, [selectedCategoryId, form]);
@@ -92,7 +92,7 @@ const filteredSubcategories =
                 >
                   <FormControl>
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select Category" />
+                      <SelectValue placeholder="All Category" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -130,7 +130,7 @@ const filteredSubcategories =
                 >
                   <FormControl>
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select Subcategory" />
+                      <SelectValue placeholder="All Subcategory" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -154,6 +154,8 @@ const filteredSubcategories =
             Apply Filter
           </Button>
         </div>
+
+
       </form>
     </Form>
   );
