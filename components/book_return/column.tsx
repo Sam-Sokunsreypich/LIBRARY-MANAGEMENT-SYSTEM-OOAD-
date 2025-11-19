@@ -118,8 +118,15 @@ export const columns: ColumnDef<BookRequestType>[] = [
   {
     accessorKey: "fine",
     header: "Fine",
-    cell: ({row}) => (row.original.rules.fine === 0 || "null" ? "" :`$${row.original.rules.fine}`)
-  },
+cell: ({ row }) => {
+  const rules = row.original.rules;
+
+  // If rules is null → show "0"
+  if (!rules) return "0";
+
+  // If fine exists
+  return rules.fine === 0 ? "0" : `$${rules.fine}`;
+}  },
   {
     accessorKey: "created_at",
     header: "Borrow day",

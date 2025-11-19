@@ -7,10 +7,20 @@ import { Search, Menu, X, ChevronDown, Home, BookOpen, Heart, UserCircle } from 
 import SignOut from '@/app/admin/components/SignOut';
 import { getMemberProfile, MemberProfile } from '@/app/user/books/action/member';
 import { getMemberByID } from '@/app/user/books/action/book';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 const[profile,setProfile] = useState<MemberProfile>()
+
+  const pathname = usePathname();
+
+  // Active color class
+  const activeClass = "text-indigo-600 font-semibold";
+
+  // Default color class
+  const defaultClass = "text-gray-50";
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -28,24 +38,31 @@ const[profile,setProfile] = useState<MemberProfile>()
           
           {/* Desktop Navigation Links */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              <Link href="/user" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center ">
-                <Home className="w-4 h-4 mr-1" />
-                Home page
-              </Link>
-              <Link href="/user/books" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                <BookOpen className="w-4 h-4 mr-1" />
-                Books
-              </Link>
-              <Link href="/user/borrowing_center" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                <BookOpen className="w-4 h-4 mr-1" />
-                Borrowing Center
-              </Link>
-              {/* <Link href="/favorites" className="text-white hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                <Heart className="w-4 h-4 mr-1" />
-                Favorites
-              </Link> */}
-            </div>
+             <div className="ml-10 flex items-baseline space-x-4">
+      <Link
+        href="/user"
+        className={`${pathname === "/user" ? activeClass : defaultClass} hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center`}
+      >
+        <Home className="w-4 h-4 mr-1" />
+        Home page
+      </Link>
+
+      <Link
+        href="/user/books"
+        className={`${pathname === "/user/books" ? activeClass : defaultClass} hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center`}
+      >
+        <BookOpen className="w-4 h-4 mr-1" />
+        Books
+      </Link>
+
+      <Link
+        href="/user/borrowing_center"
+        className={`${pathname === "/user/borrowing_center" ? activeClass : defaultClass} hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center`}
+      >
+        <BookOpen className="w-4 h-4 mr-1" />
+        Borrowing Center
+      </Link>
+    </div>
           </div>
 
           {/* Right side items */}

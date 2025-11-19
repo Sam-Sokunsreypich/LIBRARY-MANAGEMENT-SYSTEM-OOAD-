@@ -13,8 +13,7 @@ export default function ReturnBookPage() {
     async function fetchRequests() {
       try {
         const res = await getMonitoring();
-        
-        setRequest(res.filter((r)=>r.request_status.status_name === "RETUENED"));
+        setRequest(res.filter((r)=>r.request_status.status_name === "RETURNED"));
       } catch (error) {
         console.error(error);
       } finally {
@@ -24,6 +23,7 @@ export default function ReturnBookPage() {
     fetchRequests();
   }, []);
 
+  console.log('request', request)
   return (
       <div className=' mb-20 w-full '>
           <h2 className='text-gray-800 font-bold text-3xl '>System Monitoring</h2> 

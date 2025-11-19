@@ -14,8 +14,9 @@ export default function ReturnBookPage() {
     async function fetchRequests() {
       try {
         const res = await getMonitoring();
-        
-        setRequestNotPaid(res.filter((r)=>r.pay_fine === false));
+        console.log('res', res)
+        const resData = res.filter((r)=> r.book_issue === true)
+        setRequestNotPaid(resData.filter((r)=>r.pay_fine === false || r.pay_fine === null));
       } catch (error) {
         console.error(error);
       } finally {
